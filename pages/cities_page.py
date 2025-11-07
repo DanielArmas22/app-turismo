@@ -47,10 +47,14 @@ def show(db, n8n):
                     city = cities[i + j]
                     with col:
                         # Card de ciudad
-                        st.image(
-                            city.get('image_url', 'https://via.placeholder.com/400x300'),
-                            width=400
-                        )
+                        image_url = city.get('image_url', 'https://via.placeholder.com/400x300')
+                        try:
+                            if image_url and image_url.strip():
+                                st.image(image_url, width=400)
+                            else:
+                                st.image('https://via.placeholder.com/400x300', width=400)
+                        except Exception:
+                            st.image('https://via.placeholder.com/400x300', width=400)
                         
                         st.subheader(city['name'])
                         st.caption(f"📍 {city['country']}")
@@ -92,7 +96,14 @@ def show_city_details(db, n8n, city):
         col1, col2 = st.columns([2, 1])
         
         with col1:
-            st.image(city.get('image_url', 'https://via.placeholder.com/600x400'))
+            image_url = city.get('image_url', 'https://via.placeholder.com/600x400')
+            try:
+                if image_url and image_url.strip():
+                    st.image(image_url)
+                else:
+                    st.image('https://via.placeholder.com/600x400')
+            except Exception:
+                st.image('https://via.placeholder.com/600x400')
             
             st.markdown(f"### {city['name']}, {city['country']}")
             st.write(city.get('description', 'Sin descripción disponible'))

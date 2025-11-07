@@ -46,6 +46,36 @@ class SupabaseDB:
             st.error(f"Error al crear ciudad: {str(e)}")
             return None
     
+    def update_city(self, city_id: str, city_data: Dict) -> Optional[Dict]:
+        """Actualiza una ciudad"""
+        try:
+            response = self.client.table("cities").update(city_data).eq("id", city_id).execute()
+            return response.data[0] if response.data else None
+        except Exception as e:
+            st.error(f"Error al actualizar ciudad: {str(e)}")
+            return None
+    
+    def delete_city(self, city_id: str) -> bool:
+        """Elimina una ciudad (soft delete)"""
+        try:
+            self.client.table("cities").update({"is_active": False}).eq("id", city_id).execute()
+            return True
+        except Exception as e:
+            st.error(f"Error al eliminar ciudad: {str(e)}")
+            return False
+    
+    def get_all_cities(self, include_inactive: bool = False) -> List[Dict]:
+        """Obtiene todas las ciudades, incluyendo inactivas si se solicita"""
+        try:
+            query = self.client.table("cities").select("*")
+            if not include_inactive:
+                query = query.eq("is_active", True)
+            response = query.order("name").execute()
+            return response.data
+        except Exception as e:
+            st.error(f"Error al obtener ciudades: {str(e)}")
+            return []
+    
     # ==================== OPERACIONES DE POIs ====================
     
     def get_pois(self, city_id: Optional[str] = None, category: Optional[str] = None, 
@@ -97,6 +127,36 @@ class SupabaseDB:
             st.error(f"Error al actualizar rating: {str(e)}")
             return False
     
+    def update_poi(self, poi_id: str, poi_data: Dict) -> Optional[Dict]:
+        """Actualiza un POI"""
+        try:
+            response = self.client.table("points_of_interest").update(poi_data).eq("id", poi_id).execute()
+            return response.data[0] if response.data else None
+        except Exception as e:
+            st.error(f"Error al actualizar POI: {str(e)}")
+            return None
+    
+    def delete_poi(self, poi_id: str) -> bool:
+        """Elimina un POI (soft delete)"""
+        try:
+            self.client.table("points_of_interest").update({"is_active": False}).eq("id", poi_id).execute()
+            return True
+        except Exception as e:
+            st.error(f"Error al eliminar POI: {str(e)}")
+            return False
+    
+    def get_all_pois(self, include_inactive: bool = False) -> List[Dict]:
+        """Obtiene todos los POIs, incluyendo inactivos si se solicita"""
+        try:
+            query = self.client.table("points_of_interest").select("*, cities(*)")
+            if not include_inactive:
+                query = query.eq("is_active", True)
+            response = query.order("name").execute()
+            return response.data
+        except Exception as e:
+            st.error(f"Error al obtener POIs: {str(e)}")
+            return []
+    
     # ==================== OPERACIONES DE USUARIOS ====================
     
     def get_user_by_email(self, email: str) -> Optional[Dict]:
@@ -126,6 +186,42 @@ class SupabaseDB:
             return True
         except Exception as e:
             st.error(f"Error al actualizar puntos: {str(e)}")
+            return False
+    
+    def get_user_by_id(self, user_id: str) -> Optional[Dict]:
+        """Obtiene un usuario por su ID"""
+        try:
+            response = self.client.table("users").select("*").eq("id", user_id).execute()
+            return response.data[0] if response.data else None
+        except Exception as e:
+            st.error(f"Error al obtener usuario: {str(e)}")
+            return None
+    
+    def get_all_users(self) -> List[Dict]:
+        """Obtiene todos los usuarios"""
+        try:
+            response = self.client.table("users").select("*").order("created_at", desc=True).execute()
+            return response.data
+        except Exception as e:
+            st.error(f"Error al obtener usuarios: {str(e)}")
+            return []
+    
+    def update_user(self, user_id: str, user_data: Dict) -> Optional[Dict]:
+        """Actualiza un usuario"""
+        try:
+            response = self.client.table("users").update(user_data).eq("id", user_id).execute()
+            return response.data[0] if response.data else None
+        except Exception as e:
+            st.error(f"Error al actualizar usuario: {str(e)}")
+            return None
+    
+    def delete_user(self, user_id: str) -> bool:
+        """Elimina un usuario"""
+        try:
+            self.client.table("users").delete().eq("id", user_id).execute()
+            return True
+        except Exception as e:
+            st.error(f"Error al eliminar usuario: {str(e)}")
             return False
     
     # ==================== OPERACIONES DE VISITAS ====================
@@ -158,6 +254,35 @@ class SupabaseDB:
         except Exception as e:
             st.error(f"Error al contar visitas: {str(e)}")
             return 0
+    
+    def get_all_visits(self) -> List[Dict]:
+        """Obtiene todas las visitas"""
+        try:
+            response = self.client.table("user_visits").select(
+                "*, points_of_interest(*, cities(*)), users(*)"
+            ).order("visit_date", desc=True).execute()
+            return response.data
+        except Exception as e:
+            st.error(f"Error al obtener visitas: {str(e)}")
+            return []
+    
+    def update_visit(self, visit_id: str, visit_data: Dict) -> Optional[Dict]:
+        """Actualiza una visita"""
+        try:
+            response = self.client.table("user_visits").update(visit_data).eq("id", visit_id).execute()
+            return response.data[0] if response.data else None
+        except Exception as e:
+            st.error(f"Error al actualizar visita: {str(e)}")
+            return None
+    
+    def delete_visit(self, visit_id: str) -> bool:
+        """Elimina una visita"""
+        try:
+            self.client.table("user_visits").delete().eq("id", visit_id).execute()
+            return True
+        except Exception as e:
+            st.error(f"Error al eliminar visita: {str(e)}")
+            return False
     
     # ==================== OPERACIONES DE LOGROS ====================
     
@@ -215,6 +340,46 @@ class SupabaseDB:
             return True
         except Exception as e:
             st.error(f"Error al actualizar reserva: {str(e)}")
+            return False
+    
+    def get_all_bookings(self) -> List[Dict]:
+        """Obtiene todas las reservas"""
+        try:
+            response = self.client.table("bookings").select(
+                "*, points_of_interest(*, cities(*)), users(*)"
+            ).order("booking_date", desc=True).execute()
+            return response.data
+        except Exception as e:
+            st.error(f"Error al obtener reservas: {str(e)}")
+            return []
+    
+    def get_booking_by_id(self, booking_id: str) -> Optional[Dict]:
+        """Obtiene una reserva por su ID"""
+        try:
+            response = self.client.table("bookings").select(
+                "*, points_of_interest(*, cities(*)), users(*)"
+            ).eq("id", booking_id).execute()
+            return response.data[0] if response.data else None
+        except Exception as e:
+            st.error(f"Error al obtener reserva: {str(e)}")
+            return None
+    
+    def update_booking(self, booking_id: str, booking_data: Dict) -> Optional[Dict]:
+        """Actualiza una reserva"""
+        try:
+            response = self.client.table("bookings").update(booking_data).eq("id", booking_id).execute()
+            return response.data[0] if response.data else None
+        except Exception as e:
+            st.error(f"Error al actualizar reserva: {str(e)}")
+            return None
+    
+    def delete_booking(self, booking_id: str) -> bool:
+        """Elimina una reserva"""
+        try:
+            self.client.table("bookings").delete().eq("id", booking_id).execute()
+            return True
+        except Exception as e:
+            st.error(f"Error al eliminar reserva: {str(e)}")
             return False
     
     # ==================== OPERACIONES DE ESTADÍSTICAS ====================

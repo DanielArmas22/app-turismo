@@ -12,7 +12,11 @@ class N8NIntegration:
     
     def __init__(self):
         """Inicializa la integración con n8n"""
-        self.webhook_url = config.N8N_WEBHOOK_URL
+        # Asegurar que la URL no tenga -test
+        webhook_url = config.N8N_WEBHOOK_URL
+        if webhook_url and "-test" in webhook_url:
+            webhook_url = webhook_url.replace("-test", "")
+        self.webhook_url = webhook_url
     
     def _call_webhook(self, action_type: str, data: Dict) -> Optional[Dict]:
         """
@@ -32,26 +36,117 @@ class N8NIntegration:
             **data
         }
         
+        # Debug: Mostrar información de la petición
+        st.info(f"🔗 Enviando petición a: {self.webhook_url}")
+        with st.expander("🔍 Ver datos enviados (Debug)", expanded=False):
+            st.json(payload)
+        
         try:
+            # Timeout muy alto para permitir procesamiento de audio (sin límite práctico)
+            # El servidor puede tardar varios minutos en generar el audio
             response = requests.post(
                 self.webhook_url,
                 json=payload,
-                timeout=30,
+                timeout=None,  # Sin timeout - espera indefinidamente
                 headers={"Content-Type": "application/json"}
             )
+            
+            # Debug: Mostrar respuesta
+            st.info(f"📡 Respuesta recibida: Status {response.status_code}")
+            
             response.raise_for_status()
-            return response.json()
+            
+            # Verificar el Content-Type de la respuesta
+            content_type = response.headers.get('Content-Type', '').lower()
+            
+            # Si la respuesta es un archivo de audio
+            if 'audio' in content_type or response.headers.get('Content-Type', '').startswith('audio/'):
+                # Es un archivo de audio binario
+                audio_data = response.content
+                audio_size = len(audio_data)
+                
+                st.success(f"✅ Audio recibido: {audio_size / (1024*1024):.2f} MB")
+                
+                # Guardar el audio en un archivo temporal o usar directamente
+                import tempfile
+                import os
+                
+                # Crear un archivo temporal
+                with tempfile.NamedTemporaryFile(delete=False, suffix='.mp3') as tmp_file:
+                    tmp_file.write(audio_data)
+                    tmp_file_path = tmp_file.name
+                
+                # Retornar información del audio
+                result = {
+                    'audio_url': tmp_file_path,  # Ruta del archivo temporal
+                    'audio_data': audio_data,  # Datos binarios del audio
+                    'audio_size': audio_size,
+                    'content_type': content_type,
+                    'is_binary': True
+                }
+                
+                # Debug: Mostrar información del audio
+                with st.expander("✅ Ver información del audio (Debug)", expanded=False):
+                    st.json({
+                        'size_mb': f"{audio_size / (1024*1024):.2f} MB",
+                        'content_type': content_type,
+                        'file_path': tmp_file_path
+                    })
+                
+                return result
+            
+            # Intentar parsear como JSON
+            try:
+                result = response.json()
+                
+                # Debug: Mostrar resultado
+                with st.expander("✅ Ver respuesta completa (Debug)", expanded=False):
+                    st.json(result)
+                
+                return result
+            except ValueError as json_error:
+                # Si no es JSON, mostrar el contenido de la respuesta
+                st.warning(f"⚠️ La respuesta no es JSON válido. Content-Type: {content_type}")
+                st.text(response.text[:500] if response.text else "Respuesta vacía o binaria")
+                
+                # Intentar ver si hay algún mensaje útil
+                if response.text:
+                    st.info(f"📄 Respuesta completa ({len(response.text)} caracteres):")
+                    with st.expander("Ver respuesta completa", expanded=False):
+                        st.text(response.text)
+                
+                # Si la respuesta está vacía o es solo texto, intentar crear un resultado básico
+                if not response.text or response.text.strip() == "":
+                    st.error("❌ El servidor devolvió una respuesta vacía")
+                    return None
+                
+                # Si hay texto pero no es JSON, devolver None
+                st.error(f"❌ Error al parsear JSON: {str(json_error)}")
+                return None
         except requests.exceptions.Timeout:
             st.error("⏱️ Tiempo de espera agotado. El servicio está tardando demasiado.")
             return None
         except requests.exceptions.ConnectionError:
             st.error("🔌 No se pudo conectar con el servicio n8n. Verifica que esté ejecutándose.")
+            st.info(f"URL del webhook: {self.webhook_url}")
             return None
         except requests.exceptions.HTTPError as e:
-            st.error(f"❌ Error HTTP: {e.response.status_code}")
+            error_msg = f"❌ Error HTTP {e.response.status_code}"
+            try:
+                error_detail = e.response.json()
+                st.error(f"{error_msg}: {error_detail}")
+                with st.expander("❌ Ver respuesta de error completa", expanded=False):
+                    st.json(error_detail)
+            except:
+                st.error(f"{error_msg}: {e.response.text}")
+                with st.expander("❌ Ver respuesta de error completa", expanded=False):
+                    st.text(e.response.text)
             return None
         except Exception as e:
             st.error(f"❌ Error al conectar con n8n: {str(e)}")
+            import traceback
+            with st.expander("❌ Ver detalles del error", expanded=False):
+                st.code(traceback.format_exc())
             return None
     
     # ==================== AUDIO-GUÍAS ====================
@@ -59,29 +154,26 @@ class N8NIntegration:
     def generate_audio_guide(self, poi_id: str, poi_name: str, 
                            poi_description: str = "", 
                            user_id: str = "anonymous",
-                           language: str = "es",
-                           voice_type: str = "female") -> Optional[Dict]:
+                           voice_id: str = "21m00Tcm4TlvDq8ikWAM") -> Optional[Dict]:
         """
-        Genera una audio-guía para un punto de interés usando OpenAI + ElevenLabs
+        Obtiene una audio-guía para un punto de interés usando el endpoint de n8n
         
         Args:
             poi_id: ID del punto de interés
             poi_name: Nombre del POI
-            poi_description: Descripción adicional
+            poi_description: Descripción del POI
             user_id: ID del usuario
-            language: Idioma de la guía
-            voice_type: Tipo de voz (female/male)
+            voice_id: ID de la voz de ElevenLabs (default: "21m00Tcm4TlvDq8ikWAM")
             
         Returns:
-            Diccionario con la URL del audio y transcripción
+            Diccionario con la URL del audio, transcripción y metadatos
         """
         data = {
+            "user_id": user_id,
             "poi_id": poi_id,
             "poi_name": poi_name,
             "poi_description": poi_description,
-            "user_id": user_id,
-            "language": language,
-            "voice_type": voice_type
+            "voice_id": voice_id
         }
         
         return self._call_webhook("get_audio_guide", data)
@@ -342,4 +434,5 @@ class N8NIntegration:
 @st.cache_resource
 def get_n8n_integration():
     """Obtiene una instancia cacheada de la integración con n8n"""
+    # Limpiar caché si es necesario (forzar recreación)
     return N8NIntegration()

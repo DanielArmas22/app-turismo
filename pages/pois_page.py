@@ -132,7 +132,14 @@ def show_poi_details(db, n8n, poi):
         with col1:
             # Imágenes
             if poi.get('image_urls') and len(poi['image_urls']) > 0:
-                st.image(poi['image_urls'][0], width=600)
+                image_url = poi['image_urls'][0]
+                try:
+                    if image_url and image_url.strip():
+                        st.image(image_url, width=600)
+                    else:
+                        st.image('https://via.placeholder.com/600x400', width=600)
+                except Exception:
+                    st.image('https://via.placeholder.com/600x400', width=600)
             else:
                 st.image('https://via.placeholder.com/600x400', width=600)
             

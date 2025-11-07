@@ -12,7 +12,7 @@ SUPABASE_URL = os.getenv("SUPABASE_URL", "https://eaxnurtyjkkwllodyppb.supabase.
 SUPABASE_KEY = os.getenv("SUPABASE_KEY", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVheG51cnR5amtrd2xsb2R5cHBiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE3NDM1MDcsImV4cCI6MjA3NzMxOTUwN30.LhFCx_iEFIMg6SsX7YugAsVHZQg99nu0BvEWzHh-ack")
 
 # Configuración de n8n
-N8N_WEBHOOK_URL = os.getenv("N8N_WEBHOOK_URL", "https://n8n.yamboly.lat/webhook-test/tourist-guide")
+N8N_WEBHOOK_URL = os.getenv("N8N_WEBHOOK_URL", "https://n8n.yamboly.lat/webhook/tourist-guide")
 
 # Configuración de la aplicación
 APP_TITLE = "🏛️ Guía Turística Virtual"
