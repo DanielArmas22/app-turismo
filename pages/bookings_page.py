@@ -69,6 +69,13 @@ def show_new_booking(db, n8n):
             value=2
         )
         
+        # Información de contacto
+        contact_phone = st.text_input(
+            "Teléfono de contacto",
+            placeholder="+34 600 000 000",
+            help="Introduce tu número de teléfono para confirmaciones"
+        )
+        
         # Notas especiales
         special_requirements = st.text_area(
             "Requisitos especiales (opcional)",
@@ -121,36 +128,37 @@ def show_new_booking(db, n8n):
     with col_btn1:
         if st.button("🎫 Confirmar Reserva", type="primary", use_container_width=True):
             create_booking(db, n8n, selected_poi, booking_date, booking_time, 
-                          number_of_people, total_price, payment_method, special_requirements)
+                          number_of_people, total_price, payment_method, special_requirements, contact_phone)
     
     with col_btn2:
         if st.button("❌ Cancelar", use_container_width=True):
             st.info("Reserva cancelada")
 
 
-def create_booking(db, n8n, poi, date, time, people, price, payment_method, requirements):
+def create_booking(db, n8n, poi, date, time, people, price, payment_method, requirements, contact_phone):
     """Crea una nueva reserva"""
     
-    with st.spinner("💳 Procesando reserva y pago..."):
+    with st.spinner("💳 Procesando reserva..."):
         # Combinar fecha y hora
         booking_datetime = datetime.combine(date, time)
         
-        # Llamar a n8n para procesar el pago (si está configurado)
-        payment_result = None
+        # Llamar a n8n para crear la reserva
+        n8n_result = None
         try:
-            payment_result = n8n.create_booking_with_payment(
+            n8n_result = n8n.create_booking(
                 poi_id=poi['id'],
+                poi_name=poi['name'],
                 booking_date=booking_datetime,
                 number_of_people=people,
                 total_price=price,
                 user_id=st.session_state.user_id,
-                user_email=st.session_state.user_email,
-                currency="EUR",
-                payment_method=payment_method.lower()
+                contact_email=st.session_state.user_email,
+                contact_phone=contact_phone,
+                currency="EUR"
             )
         except Exception as e:
-            # Si n8n no está disponible, continuar sin procesamiento de pago
-            st.warning(f"⚠️ No se pudo procesar el pago automáticamente: {str(e)}")
+            # Si n8n no está disponible, continuar con la creación local
+            st.warning(f"⚠️ No se pudo procesar la reserva en n8n: {str(e)}")
             pass
         
         # Crear reserva en la base de datos
@@ -161,11 +169,12 @@ def create_booking(db, n8n, poi, date, time, people, price, payment_method, requ
             "number_of_people": people,
             "total_price": price,
             "currency": "EUR",
-            "status": "confirmed" if payment_result else "pending",
+            "status": "confirmed" if n8n_result else "pending",
             "payment_method": payment_method,
-            "payment_id": payment_result.get('payment_id') if payment_result else None,
+            "payment_id": n8n_result.get('booking_id') if n8n_result else None,
             "special_requirements": requirements,
-            "contact_email": st.session_state.user_email
+            "contact_email": st.session_state.user_email,
+            "contact_phone": contact_phone
         }
         
         result = db.create_booking(booking_data)

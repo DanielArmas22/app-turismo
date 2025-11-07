@@ -36,11 +36,6 @@ class N8NIntegration:
             **data
         }
         
-        # Debug: Mostrar información de la petición
-        st.info(f"🔗 Enviando petición a: {self.webhook_url}")
-        with st.expander("🔍 Ver datos enviados (Debug)", expanded=False):
-            st.json(payload)
-        
         try:
             # Timeout muy alto para permitir procesamiento de audio (sin límite práctico)
             # El servidor puede tardar varios minutos en generar el audio
@@ -50,9 +45,6 @@ class N8NIntegration:
                 timeout=None,  # Sin timeout - espera indefinidamente
                 headers={"Content-Type": "application/json"}
             )
-            
-            # Debug: Mostrar respuesta
-            st.info(f"📡 Respuesta recibida: Status {response.status_code}")
             
             response.raise_for_status()
             
@@ -64,8 +56,6 @@ class N8NIntegration:
                 # Es un archivo de audio binario
                 audio_data = response.content
                 audio_size = len(audio_data)
-                
-                st.success(f"✅ Audio recibido: {audio_size / (1024*1024):.2f} MB")
                 
                 # Guardar el audio en un archivo temporal o usar directamente
                 import tempfile
@@ -85,68 +75,26 @@ class N8NIntegration:
                     'is_binary': True
                 }
                 
-                # Debug: Mostrar información del audio
-                with st.expander("✅ Ver información del audio (Debug)", expanded=False):
-                    st.json({
-                        'size_mb': f"{audio_size / (1024*1024):.2f} MB",
-                        'content_type': content_type,
-                        'file_path': tmp_file_path
-                    })
-                
                 return result
             
             # Intentar parsear como JSON
             try:
                 result = response.json()
-                
-                # Debug: Mostrar resultado
-                with st.expander("✅ Ver respuesta completa (Debug)", expanded=False):
-                    st.json(result)
-                
                 return result
             except ValueError as json_error:
-                # Si no es JSON, mostrar el contenido de la respuesta
-                st.warning(f"⚠️ La respuesta no es JSON válido. Content-Type: {content_type}")
-                st.text(response.text[:500] if response.text else "Respuesta vacía o binaria")
-                
-                # Intentar ver si hay algún mensaje útil
-                if response.text:
-                    st.info(f"📄 Respuesta completa ({len(response.text)} caracteres):")
-                    with st.expander("Ver respuesta completa", expanded=False):
-                        st.text(response.text)
-                
-                # Si la respuesta está vacía o es solo texto, intentar crear un resultado básico
-                if not response.text or response.text.strip() == "":
-                    st.error("❌ El servidor devolvió una respuesta vacía")
-                    return None
-                
-                # Si hay texto pero no es JSON, devolver None
-                st.error(f"❌ Error al parsear JSON: {str(json_error)}")
+                st.error(f"❌ Error al parsear respuesta: {str(json_error)}")
                 return None
         except requests.exceptions.Timeout:
             st.error("⏱️ Tiempo de espera agotado. El servicio está tardando demasiado.")
             return None
         except requests.exceptions.ConnectionError:
             st.error("🔌 No se pudo conectar con el servicio n8n. Verifica que esté ejecutándose.")
-            st.info(f"URL del webhook: {self.webhook_url}")
             return None
         except requests.exceptions.HTTPError as e:
-            error_msg = f"❌ Error HTTP {e.response.status_code}"
-            try:
-                error_detail = e.response.json()
-                st.error(f"{error_msg}: {error_detail}")
-                with st.expander("❌ Ver respuesta de error completa", expanded=False):
-                    st.json(error_detail)
-            except:
-                st.error(f"{error_msg}: {e.response.text}")
-                with st.expander("❌ Ver respuesta de error completa", expanded=False):
-                    st.text(e.response.text)
+            st.error(f"❌ Error HTTP {e.response.status_code}")
             return None
         except Exception as e:
             st.error(f"❌ Error al conectar con n8n: {str(e)}")
-            import traceback
-            with st.expander("❌ Ver detalles del error", expanded=False):
-                st.code(traceback.format_exc())
             return None
     
     # ==================== AUDIO-GUÍAS ====================
@@ -216,6 +164,46 @@ class N8NIntegration:
         return self._call_webhook("get_poi_recommendations", data)
     
     # ==================== RESERVAS Y PAGOS ====================
+    
+    def create_booking(self, poi_id: str,
+                      poi_name: str,
+                      booking_date: datetime,
+                      number_of_people: int,
+                      total_price: float,
+                      user_id: str,
+                      contact_email: str,
+                      contact_phone: str = None,
+                      currency: str = "EUR") -> Optional[Dict]:
+        """
+        Crea una reserva usando el webhook de n8n
+        
+        Args:
+            poi_id: ID del punto de interés
+            poi_name: Nombre del punto de interés
+            booking_date: Fecha y hora de la reserva
+            number_of_people: Número de personas
+            total_price: Precio total
+            user_id: ID del usuario
+            contact_email: Email de contacto
+            contact_phone: Teléfono de contacto (opcional)
+            currency: Moneda (EUR, USD, etc.)
+            
+        Returns:
+            Información de la reserva creada
+        """
+        data = {
+            "user_id": user_id,
+            "poi_id": poi_id,
+            "poi_name": poi_name,
+            "booking_date": booking_date.isoformat(),
+            "number_of_people": number_of_people,
+            "total_price": total_price,
+            "currency": currency,
+            "contact_email": contact_email,
+            "contact_phone": contact_phone or ""
+        }
+        
+        return self._call_webhook("create_booking", data)
     
     def create_booking_with_payment(self, poi_id: str, 
                                    booking_date: datetime,

@@ -117,7 +117,6 @@ def show_generate_audio(db, n8n):
 def generate_audio_guide(db, n8n, poi, context, voice_id):
     """Obtiene una audio-guía usando n8n"""
     
-    # Debug: Verificar que n8n existe
     if n8n is None:
         st.error("❌ Error: n8n no está inicializado")
         return
@@ -133,11 +132,6 @@ def generate_audio_guide(db, n8n, poi, context, voice_id):
         if not poi_description:
             poi_description = f"Historia, horarios y consejos sobre {poi['name']}"
         
-        # Debug: Mostrar datos que se enviarán
-        st.info(f"📤 Preparando petición para POI: {poi['name']}")
-        st.info(f"👤 User ID: {st.session_state.user_id}")
-        st.info(f"🎤 Voice ID: {voice_id}")
-        
         # Llamar a n8n para obtener la audio-guía
         try:
             result = n8n.generate_audio_guide(
@@ -149,9 +143,6 @@ def generate_audio_guide(db, n8n, poi, context, voice_id):
             )
         except Exception as e:
             st.error(f"❌ Error al llamar a n8n: {str(e)}")
-            import traceback
-            with st.expander("❌ Ver detalles del error", expanded=False):
-                st.code(traceback.format_exc())
             return
         
         if result:
@@ -246,9 +237,6 @@ def generate_audio_guide(db, n8n, poi, context, voice_id):
                 st.balloons()
             except Exception as e:
                 st.error(f"❌ Error al procesar la respuesta: {str(e)}")
-                import traceback
-                with st.expander("❌ Ver detalles del error", expanded=False):
-                    st.code(traceback.format_exc())
         else:
             st.error("❌ No se pudo obtener la audio-guía. Por favor, verifica:")
             st.error("1. Que el endpoint de n8n esté funcionando")
