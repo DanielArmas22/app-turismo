@@ -87,11 +87,17 @@ class N8NIntegration:
         except requests.exceptions.Timeout:
             st.error("⏱️ Tiempo de espera agotado. El servicio está tardando demasiado.")
             return None
-        except requests.exceptions.ConnectionError:
-            st.error("🔌 No se pudo conectar con el servicio n8n. Verifica que esté ejecutándose.")
+        except requests.exceptions.ConnectionError as e:
+            st.error("🔌 No se pudo conectar con el servicio n8n")
+            st.warning(f"URL: {self.webhook_url}")
+            st.info("Verifica que el servicio esté activo y accesible")
             return None
         except requests.exceptions.HTTPError as e:
             st.error(f"❌ Error HTTP {e.response.status_code}")
+            if e.response.status_code == 404:
+                st.warning("El endpoint no existe. Verifica la URL del webhook")
+            elif e.response.status_code == 500:
+                st.warning("Error en el servidor n8n. Revisa los logs del workflow")
             return None
         except Exception as e:
             st.error(f"❌ Error al conectar con n8n: {str(e)}")

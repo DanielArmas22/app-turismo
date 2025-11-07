@@ -37,6 +37,10 @@ class SupabaseDB:
             st.error(f"Error al obtener ciudad: {str(e)}")
             return None
     
+    def get_city(self, city_id: str) -> Optional[Dict]:
+        """Alias de get_city_by_id"""
+        return self.get_city_by_id(city_id)
+    
     def create_city(self, city_data: Dict) -> Optional[Dict]:
         """Crea una nueva ciudad"""
         try:
@@ -105,6 +109,10 @@ class SupabaseDB:
         except Exception as e:
             st.error(f"Error al obtener POI: {str(e)}")
             return None
+    
+    def get_poi(self, poi_id: str) -> Optional[Dict]:
+        """Alias de get_poi_by_id"""
+        return self.get_poi_by_id(poi_id)
     
     def create_poi(self, poi_data: Dict) -> Optional[Dict]:
         """Crea un nuevo punto de interés"""
@@ -411,6 +419,10 @@ class SupabaseDB:
         except Exception as e:
             st.error(f"Error al obtener estadísticas: {str(e)}")
             return []
+    
+    def get_user_stats(self, user_id: str, limit: int = 100) -> List[Dict]:
+        """Alias de get_usage_stats para un usuario específico"""
+        return self.get_usage_stats(user_id=user_id, limit=limit)
     
     # ==================== OPERACIONES DE AUDIO-GUÍAS ====================
     

@@ -227,6 +227,7 @@ with st.sidebar:
         "🏠 Inicio": "home",
         "🌍 Explorar Ciudades": "cities",
         "📍 Puntos de Interés": "pois",
+        "🎯 Recomendaciones": "recommendations",
         "🎧 Audio-Guías": "audio",
         "🎫 Mis Reservas": "bookings",
         "⭐ Favoritos": "favorites",
@@ -353,6 +354,10 @@ elif page == "cities":
 elif page == "pois":
     from pages import pois_page
     pois_page.show(db, n8n)
+
+elif page == "recommendations":
+    from pages import recommendations_page
+    recommendations_page.show(db, n8n)
 
 elif page == "audio":
     from pages import audio_page
