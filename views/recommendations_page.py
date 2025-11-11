@@ -4,6 +4,7 @@ Página de Recomendaciones de POIs
 import streamlit as st
 import pandas as pd
 from datetime import datetime
+from typing import Any, Dict, List
 import config
 
 def show(db, n8n):
@@ -159,26 +160,23 @@ def search_recommendations(db, n8n, city_id, lat, lng, categories, max_distance,
                 show_local_pois_fallback(db, city_id, lat, lng)
                 return
             
-            if result and 'recommendations' in result:
-                recommendations = result['recommendations']
-                
-                if not recommendations:
-                    st.warning("No se encontraron recomendaciones con los criterios especificados")
-                    return
-                
+            st.markdown("### 🧪 Respuesta de n8n")
+            with st.expander("Mostrar/ocultar payload bruto", expanded=False):
+                st.json(result)
+
+            recommendations = []
+            if isinstance(result, list):
+                recommendations = result
+            elif isinstance(result, dict):
+                if result.get('recommendations'):
+                    recommendations = result['recommendations']
+                elif result.get('pois'):
+                    recommendations = result['pois']
+
+            if recommendations:
                 st.success(f"✅ Se encontraron {len(recommendations)} recomendaciones")
-                
-                # Guardar recomendaciones en la base de datos
                 save_recommendations_to_db(db, recommendations, city_id, lat, lng)
-                
-                # Mostrar resultados
                 display_recommendations(db, recommendations, lat, lng)
-                
-            elif result and 'pois' in result:
-                # Formato alternativo de respuesta
-                pois = result['pois']
-                st.success(f"✅ Se encontraron {len(pois)} recomendaciones")
-                display_recommendations(db, pois, lat, lng)
             else:
                 st.warning("⚠️ El servicio respondió pero sin recomendaciones")
                 st.info("Mostrando lugares disponibles en la base de datos local...")
@@ -222,19 +220,19 @@ def display_recommendations(db, recommendations, user_lat, user_lng):
     st.markdown("---")
     st.subheader("🎯 Lugares Recomendados")
     
+    normalized = [normalize_recommendation(rec) for rec in recommendations]
+
     # Preparar datos para el mapa
-    map_data = []
-    for rec in recommendations:
-        lat = rec.get('latitude') or rec.get('lat')
-        lng = rec.get('longitude') or rec.get('lng')
-        
-        if lat and lng:
-            map_data.append({
-                'lat': float(lat),
-                'lon': float(lng),
-                'name': rec.get('name', 'Sin nombre'),
-                'rating': rec.get('rating', 0)
-            })
+    map_data = [
+        {
+            "lat": item["latitude"],
+            "lon": item["longitude"],
+            "name": item["name"],
+            "rating": item["rating"]
+        }
+        for item in normalized
+        if item["latitude"] is not None and item["longitude"] is not None
+    ]
     
     # Mostrar mapa si hay datos
     if map_data:
@@ -296,59 +294,100 @@ def display_recommendations(db, recommendations, user_lat, user_lng):
     st.markdown("---")
     st.markdown("### 📋 Lista de Recomendaciones")
     
-    for idx, rec in enumerate(recommendations, 1):
+    for idx, item in enumerate(normalized, 1):
         with st.container():
-            col1, col2, col3 = st.columns([3, 1, 1])
-            
+            col1, col2, col3 = st.columns([3, 1.4, 1])
+
             with col1:
-                name = rec.get('name', 'Sin nombre')
-                st.markdown(f"**{idx}. {name}**")
-                
-                # Información básica
-                info_parts = []
-                if rec.get('category'):
-                    info_parts.append(f"📌 {rec['category']}")
-                if rec.get('rating'):
-                    info_parts.append(f"⭐ {rec['rating']:.1f}")
-                if rec.get('distance'):
-                    info_parts.append(f"📍 {rec['distance']:.1f} km")
-                
-                if info_parts:
-                    st.caption(" • ".join(info_parts))
-                
-                # Descripción
-                if rec.get('description'):
-                    st.write(rec['description'][:150] + "...")
-            
+                st.markdown(f"**{idx}. {item['name']}**")
+                if item["summary_tags"]:
+                    st.caption(" • ".join(item["summary_tags"]))
+                if item["description"]:
+                    st.write(item["description"])
+                if item["short_description"]:
+                    st.caption(item["short_description"])
+                if item["types"]:
+                    st.caption("🏷️ " + ", ".join(item["types"]))
+
             with col2:
-                # Score o relevancia
-                score = rec.get('score', rec.get('relevance_score', 0))
-                if score:
-                    st.metric("Relevancia", f"{score:.0%}")
-                
-                # Precio
-                price = rec.get('entry_price', rec.get('price', 0))
-                if price:
-                    st.caption(f"💰 €{price:.2f}")
-            
+                st.metric("⭐ Rating", f"{item['rating']:.1f}", help=f"{item['total_reviews']:,} reseñas")
+                if item["distance_km"] is not None:
+                    st.caption(f"📍 A {item['distance_km']:.1f} km")
+                if item["price"] is not None:
+                    st.caption(f"💰 €{item['price']:.2f}")
+                if item["relevance"] is not None:
+                    st.metric("🎯 Relevancia", f"{item['relevance']:.0%}")
+
             with col3:
-                # Acciones
-                poi_id = rec.get('id') or rec.get('poi_id')
-                
-                if poi_id and st.session_state.user_id:
-                    if st.button("❤️ Guardar", key=f"save_{poi_id}_{idx}", use_container_width=True):
-                        db.add_favorite(st.session_state.user_id, poi_id)
+                if item["map_url"]:
+                    st.link_button("🗺️ Ver en Maps", item["map_url"], use_container_width=True)
+                if item["website"]:
+                    st.markdown(f"[🌐 Sitio web]({item['website']})", unsafe_allow_html=True)
+                if item["phone"]:
+                    st.caption(f"📞 {item['phone']}")
+                if item["poi_id"] and st.session_state.user_id:
+                    if st.button("❤️ Guardar", key=f"save_{item['poi_id']}_{idx}", use_container_width=True):
+                        db.add_favorite(st.session_state.user_id, item["poi_id"])
                         st.success("Guardado!")
                         st.rerun()
-                
-                # Ver en mapa
-                lat = rec.get('latitude') or rec.get('lat')
-                lng = rec.get('longitude') or rec.get('lng')
-                if lat and lng:
-                    maps_url = f"https://www.google.com/maps?q={lat},{lng}"
-                    st.markdown(f"[🗺️ Ver]({maps_url})", unsafe_allow_html=True)
-            
-            st.divider()
+
+            with st.expander("➕ Ver más detalles", expanded=False):
+                detail_cols = st.columns([2, 1])
+                with detail_cols[0]:
+                    if item["image_urls"]:
+                        st.image(item["image_urls"][0], use_container_width=True)
+                    if item["description"]:
+                        st.write(item["description"])
+                    elif item["short_description"]:
+                        st.write(item["short_description"])
+                with detail_cols[1]:
+                    st.caption("ID Google Place")
+                    st.code(item["google_place_id"] or "N/A")
+                    if item["phone"]:
+                        st.caption(f"📞 {item['phone']}")
+                    if item["website"]:
+                        st.markdown(f"[🌐 Sitio web]({item['website']})")
+
+        st.divider()
+
+
+def normalize_recommendation(rec: Dict[str, Any]) -> Dict[str, Any]:
+    """Normaliza objetos provenientes de n8n para su renderizado."""
+    metadata = rec.get("metadata") or {}
+    distance = metadata.get("distance_km") or rec.get("distance")
+    types = metadata.get("types") or rec.get("types") or []
+
+    summary_tags: List[str] = []
+    if rec.get("category"):
+        summary_tags.append(f"📌 {rec['category']}")
+    if rec.get("rating"):
+        summary_tags.append(f"⭐ {float(rec['rating']):.1f}")
+    if distance:
+        summary_tags.append(f"📍 {float(distance):.1f} km")
+    if rec.get("total_reviews"):
+        summary_tags.append(f"👥 {int(rec['total_reviews']):,} reseñas")
+
+    return {
+        "poi_id": rec.get("id") or rec.get("poi_id"),
+        "name": rec.get("name", "Sin nombre"),
+        "description": rec.get("description") or metadata.get("description") or "",
+        "short_description": rec.get("short_description") or metadata.get("short_description") or "",
+        "category": rec.get("category"),
+        "rating": float(rec.get("rating") or 0),
+        "total_reviews": int(rec.get("total_reviews") or 0),
+        "price": rec.get("entry_price") or rec.get("price"),
+        "distance_km": float(distance) if distance else None,
+        "latitude": rec.get("latitude") or rec.get("lat"),
+        "longitude": rec.get("longitude") or rec.get("lng"),
+        "image_urls": rec.get("image_urls") or metadata.get("images") or [],
+        "map_url": metadata.get("google_maps_uri"),
+        "website": metadata.get("website"),
+        "phone": metadata.get("international_phone"),
+        "google_place_id": metadata.get("google_place_id"),
+        "types": types,
+        "summary_tags": summary_tags,
+        "relevance": rec.get("score") or rec.get("relevance_score"),
+    }
 
 
 def show_local_pois_fallback(db, city_id, user_lat, user_lng):

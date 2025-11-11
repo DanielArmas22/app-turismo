@@ -8,8 +8,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Configuración de Supabase
-SUPABASE_URL = os.getenv("SUPABASE_URL", "https://eaxnurtyjkkwllodyppb.supabase.co")
-SUPABASE_KEY = os.getenv("SUPABASE_KEY", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVheG51cnR5amtrd2xsb2R5cHBiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE3NDM1MDcsImV4cCI6MjA3NzMxOTUwN30.LhFCx_iEFIMg6SsX7YugAsVHZQg99nu0BvEWzHh-ack")
+SUPABASE_URL = os.getenv("SUPABASE_URL", "https://tciaojtfllfqroanvcuz.supabase.co")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjaWFvanRmbGxmcXJvYW52Y3V6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE3NjM3MjcsImV4cCI6MjA3NzMzOTcyN30.L4X57t6EUw8zXswAtMJniyY3A2MFCHvB1ClRKQf6XpE")
 
 # Configuración de n8n
 N8N_WEBHOOK_URL = os.getenv("N8N_WEBHOOK_URL", "https://n8n.yamboly.lat/webhook/tourist-guide")
@@ -83,4 +83,14 @@ ACHIEVEMENT_TYPES = {
     "social": "Social",
     "experto": "Experto",
     "especial": "Especial"
+}
+
+# Voces disponibles para audio-guías (n8n / ElevenLabs)
+AUDIO_VOICES = {
+    "Alloy": "alloy",
+    "Echo": "echo",
+    "Fable": "fable",
+    "Nova": "nova",
+    "Onyx": "onyx",
+    "Shimmer": "shimmer",
 }

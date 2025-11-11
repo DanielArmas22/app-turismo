@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reportes de Gestión Farmacéutica</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: #f0f0f0;
+            padding: 20px;
+        }
+
+        .report-container {
+            max-width: 800px;
+            margin: 0 auto 40px;
+            background: white;
+            border: 2px solid #333;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            page-break-after: always;
+        }
+
+        .report-header {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            border-bottom: 3px dashed #333;
+        }
+
+        .report-header h1 {
+            font-size: 18px;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+
+        .report-header .subtitle {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .report-info {
+            padding: 15px 20px;
+            background: #ecf0f1;
+            border-bottom: 1px dashed #bdc3c7;
+        }
+
+        .report-info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 12px;
+        }
+
+        .report-info-row .label {
+            font-weight: bold;
+        }
+
+        .report-body {
+            padding: 20px;
+        }
+
+        .section-title {
+            background: #34495e;
+            color: white;
+            padding: 8px 15px;
+            margin: 15px 0 10px 0;
+            font-size: 13px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+            font-size: 11px;
+        }
+
+        .data-table th {
+            background: #95a5a6;
+            padding: 8px;
+            text-align: left;
+            border-bottom: 2px solid #333;
+            font-weight: bold;
+        }
+
+        .data-table td {
+            padding: 8px;
+            border-bottom: 1px dotted #bdc3c7;
+        }
+
+        .data-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .data-table .total-row {
+            background: #e8e8e8;
+            font-weight: bold;
+            border-top: 2px solid #333;
+        }
+
+        .kpi-section {
+            background: #fff9e6;
+            border: 2px solid #f39c12;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .kpi-title {
+            color: #d68910;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
+
+        .kpi-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #e67e22;
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        .report-footer {
+            padding: 15px 20px;
+            background: #ecf0f1;
+            border-top: 3px dashed #333;
+            font-size: 10px;
+            text-align: center;
+        }
+
+        .divider {
+            border-top: 1px dashed #95a5a6;
+            margin: 15px 0;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            background: #27ae60;
+            color: white;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        .badge.warning {
+            background: #e74c3c;
+        }
+
+        .badge.info {
+            background: #3498db;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .report-container {
+                box-shadow: none;
+                border: 1px solid #333;
+                margin-bottom: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- REPORTE 1 -->
+    <div class="report-container">
+        <div class="report-header">
+            <h1>COMPRAS EJECUTADAS</h1>
+        </div>
+
+        <div class="report-info">
+            <div class="report-info-row">
+                <span class="label">FECHA DE EMISIÓN:</span>
+                <span>11/11/2025 - 14:30 hrs</span>
+            </div>
+            <div class="report-info-row">
+                <span class="label">PERÍODO:</span>
+                <span>OCTUBRE 2025 (Q4-2025)</span>
+            </div>
+            <!-- <div class="report-info-row">
+                <span class="label">GRANULARIDAD:</span>
+                <span>Mes - Medicamento - Proveedor</span>
+            </div> -->
+            <div class="report-info-row">
+                <span>Monto Presupuestado:</span>
+                <span>S/ 80,000.00</span>
+            </div>
+            <div class="report-info-row">
+                <span>Metodo de Pago:</span>
+                <span>Transferencia</span>
+            </div>
+            <div class="report-info-row">
+                <span>Sede:</span>
+                <span>HOSPITAL CENTRAL - LIMA</span>
+            </div>
+        </div>
+
+        <div class="report-body">
+            <div class="section-title">DETALLE DE COMPRAS EJECUTADAS</div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>CÓDIGO</th>
+                        <th>MEDICAMENTO</th>
+                        <th>MARCA</th>
+                        <th>PROVEEDOR</th>
+                        <th class="text-right">CANTIDAD</th>
+                        <th class="text-right">MONTO (S/)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>MED-001</td>
+                        <td>Paracetamol 500mg</td>
+                        <td>GenéricoPro</td>
+                        <td>Droguería Central SAC</td>
+                        <td class="text-right">5,000 und</td>
+                        <td class="text-right">12,500.00</td>
+                    </tr>
+                    <tr>
+                        <td>MED-002</td>
+                        <td>Ibuprofeno 400mg</td>
+                        <td>PharmaPlus</td>
+                        <td>Distribuidora MediFarm</td>
+                        <td class="text-right">3,200 und</td>
+                        <td class="text-right">9,600.00</td>
+                    </tr>
+                    <tr>
+                        <td>MED-003</td>
+                        <td>Amoxicilina 500mg</td>
+                        <td>AntibióticoMax</td>
+                        <td>Droguería Central SAC</td>
+                        <td class="text-right">2,800 und</td>
+                        <td class="text-right">16,800.00</td>
+                    </tr>
+                    <tr>
+                        <td>MED-004</td>
+                        <td>Omeprazol 20mg</td>
+                        <td>GastroRelief</td>
+                        <td>Importadora Salud Perú</td>
+                        <td class="text-right">4,500 und</td>
+                        <td class="text-right">13,500.00</td>
+                    </tr>
+                    <tr>
+                        <td>MED-005</td>
+                        <td>Losartán 50mg</td>
+                        <td>CardioVital</td>
+                        <td>Distribuidora MediFarm</td>
+                        <td class="text-right">1,800 und</td>
+                        <td class="text-right">10,800.00</td>
+                    </tr>
+                    <tr class="total-row">
+                        <td colspan="4" class="text-right">TOTAL COMPRADO:</td>
+                        <td class="text-right">17,300 und</td>
+                        <td class="text-right">63,200.00</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="kpi-section">
+                <div class="kpi-title">KPI: AVANCE DE COMPRA</div>
+                <div class="divider"></div>
+                <div class="report-info-row">
+                    <span>Monto Comprado:</span>
+                    <span>S/ 63,200.00</span>
+                </div>
+
+                <div class="kpi-value">79.0% EJECUTADO</div>
+                <div class="text-center">
+                    <span class="badge">EN BUEN AVANCE</span>
+                </div>
+            </div>
+
+            <div class="section-title">RESUMEN POR PROVEEDOR</div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>PROVEEDOR</th>
+                        <th class="text-right">N° ÓRDENES</th>
+                        <th class="text-right">MONTO TOTAL (S/)</th>
+                        <th class="text-right">% PARTICIPACIÓN</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Droguería Central SAC</td>
+                        <td class="text-right">2</td>
+                        <td class="text-right">29,300.00</td>
+                        <td class="text-right">46.4%</td>
+                    </tr>
+                    <tr>
+                        <td>Distribuidora MediFarm</td>
+                        <td class="text-right">2</td>
+                        <td class="text-right">20,400.00</td>
+                        <td class="text-right">32.3%</td>
+                    </tr>
+                    <tr>
+                        <td>Importadora Salud Perú</td>
+                        <td class="text-right">1</td>
+                        <td class="text-right">13,500.00</td>
+                        <td class="text-right">21.4%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="report-footer">
+            <p>Sistema de Gestión Farmacéutica - H_ComprasEjecutadas</p>
+            <p>Dimensiones: Tiempo | Medicamento | Proveedor</p>
+        </div>
+    </div>
+
+    <!-- REPORTE 2 -->
+    <div class="report-container">
+        <div class="report-header">
+            <h1>PRESUPUESTO DE COMPRAS</h1>
+        </div>
+        <div class="report-info">
+            <div class="report-info-row">
+                <span class="label">FECHA DE EMISIÓN:</span>
+                <span>11/11/2025 - 14:30 hrs</span>
+            </div>
+            <div class="report-info-row">
+                <span class="label">PERÍODO:</span>
+                <span>OCTUBRE 2025</span>
+            </div>
+            <!-- <div class="report-info-row">
+                <span class="label">GRANULARIDAD:</span>
+                <span>Mes - Organización - Medicamento</span>
+            </div> -->
+            <!-- <div class="report-info-row">
+                <span class="label">TIPO DE REPORTE:</span>
+                <span>PLANIFICACIÓN Y EJECUCIÓN</span>
+            </div> -->
+        </div>
+
+        <div class="report-body">
+            <div class="section-title">SEDE: HOSPITAL CENTRAL - LIMA</div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>CÓDIGO</th>
+                        <th>MEDICAMENTO</th>
+                        <th class="text-right">PRESUPUESTO (S/)</th>
+                        <th class="text-right">EJECUTADO (S/)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>MED-001</td>
+                        <td>Paracetamol 500mg</td>
+                        <td class="text-right">15,000.00</td>
+                        <td class="text-right">12,500.00</td>
+                    </tr>
+                    <tr>
+                        <td>MED-002</td>
+                        <td>Ibuprofeno 400mg</td>
+                        <td class="text-right">12,000.00</td>
+                        <td class="text-right">9,600.00</td>
+                    </tr>
+                    <tr>
+                        <td>MED-003</td>
+                        <td>Amoxicilina 500mg</td>
+                        <td class="text-right">18,000.00</td>
+                        <td class="text-right">16,800.00</td>
+                    </tr>
+                    <tr class="total-row">
+                        <td colspan="2" class="text-right">SUBTOTAL HOSPITAL CENTRAL:</td>
+                        <td class="text-right">45,000.00</td>
+                        <td class="text-right">38,900.00</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="section-title">SEDE: CLÍNICA NORTE - TRUJILLO</div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>CÓDIGO</th>
+                        <th>MEDICAMENTO</th>
+                        <th class="text-right">PRESUPUESTO (S/)</th>
+                        <th class="text-right">EJECUTADO (S/)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>MED-004</td>
+                        <td>Omeprazol 20mg</td>
+                        <td class="text-right">20,000.00</td>
+                        <td class="text-right">13,500.00</td>
+                    </tr>
+                    <tr>
+                        <td>MED-005</td>
+                        <td>Losartán 50mg</td>
+                        <td class="text-right">15,000.00</td>
+                        <td class="text-right">10,800.00</td>
+                    </tr>
+                    <tr class="total-row">
+                        <td colspan="2" class="text-right">SUBTOTAL CLÍNICA NORTE:</td>
+                        <td class="text-right">35,000.00</td>
+                        <td class="text-right">24,300.00</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="divider"></div>
+
+            <table class="data-table">
+                <tbody>
+                    <tr class="total-row">
+                        <td colspan="2" class="text-right"><strong>TOTAL GENERAL:</strong></td>
+                        <td class="text-right"><strong>80,000.00</strong></td>
+                        <td class="text-right"><strong>63,200.00</strong></td>
+                        <td class="text-right"><strong>79.0%</strong></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="kpi-section">
+                <div class="kpi-title">KPI: PORCENTAJE DE EJECUCIÓN GLOBAL</div>
+                <div class="kpi-value">79.0%</div>
+                <div class="text-center">
+                    <span class="badge">META: 75-85% MENSUAL</span>
+                </div>
+                <div class="divider"></div>
+                <p style="font-size: 11px; text-align: center; margin-top: 10px;">
+                    La organización mantiene un nivel de ejecución saludable.<br>
+                    Se recomienda acelerar compras en Clínica Norte.
+                </p>
+            </div>
+        </div>
+
+        <div class="report-footer">
+            <p>Sistema de Gestión Farmacéutica - H_PresupuestoCompras</p>
+            <p>Dimensiones: Tiempo | Organización | Medicamento</p>
+        </div>
+    </div>
+
+    <!-- REPORTE 3 -->
+    <div class="report-container">
+        <div class="report-header">
+            <h1>CUMPLIMIENTO DE RECETAS</h1>
+        </div>
+
+        <div class="report-info">
+            <div class="report-info-row">
+                <span class="label">FECHA DE EMISIÓN:</span>
+                <span>11/11/2025 - 14:30 hrs</span>
+            </div>
+            <div class="report-info-row">
+                <span class="label">PERÍODO:</span>
+                <span>01/10/2025 - 31/10/2025</span>
+            </div>
+            <!-- <div class="report-info-row">
+                <span class="label">GRANULARIDAD:</span>
+                <span>Día - Paciente - Tipo Receta</span>
+            </div> -->
+            <!-- <div class="report-info-row">
+                <span class="label">TIPO DE REPORTE:</span>
+                <span>CALIDAD DE SERVICIO</span>
+            </div> -->
+        </div>
+
+        <div class="report-body">
+            <div class="section-title">RESUMEN MENSUAL - OCTUBRE 2025</div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>TIPO DE RECETA</th>
+                        <th class="text-right">EMITIDAS</th>
+                        <th class="text-right">ATENDIDAS</th>
+                        <th class="text-right">PENDIENTES</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Consulta Externa</td>
+                        <td class="text-right">1,250</td>
+                        <td class="text-right">1,188</td>
+                        <td class="text-right">62</td>
+                    </tr>
+                    <tr>
+                        <td>Hospitalización</td>
+                        <td class="text-right">380</td>
+                        <td class="text-right">376</td>
+                        <td class="text-right">4</td>
+                    </tr>
+                    <tr>
+                        <td>Emergencia</td>
+                        <td class="text-right">560</td>
+                        <td class="text-right">558</td>
+                        <td class="text-right">2</td>
+                    </tr>
+                    <tr>
+                        <td>Crónico Controlado</td>
+                        <td class="text-right">820</td>
+                        <td class="text-right">738</td>
+                        <td class="text-right">82</td>
+                    </tr>
+                    <tr class="total-row">
+                        <td class="text-right">TOTALES:</td>
+                        <td class="text-right">3,010</td>
+                        <td class="text-right">2,860</td>
+                        <td class="text-right">150</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- <div class="kpi-section">
+                <div class="kpi-title">KPI PRINCIPAL: CUMPLIMIENTO DE RECETA</div>
+                <div class="kpi-value">95.0%</div>
+                <div class="text-center">
+                    <span class="badge">META INSTITUCIONAL: ≥ 92%</span>
+                </div>
+                <div class="divider"></div>
+                <div class="report-info-row">
+                    <span>Recetas Emitidas:</span>
+                    <span>3,010</span>
+                </div>
+                <div class="report-info-row">
+                    <span>Recetas Atendidas:</span>
+                    <span>2,860</span>
+                </div>
+                <div class="report-info-row">
+                    <span>Recetas Pendientes:</span>
+                    <span>150</span>
+                </div>
+            </div> -->
+
+            <div class="section-title">DETALLE SEMANAL</div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>SEMANA</th>
+                        <th>PERÍODO</th>
+                        <th class="text-right">EMITIDAS</th>
+                        <th class="text-right">ATENDIDAS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Semana 1</td>
+                        <td>01/10 - 07/10</td>
+                        <td class="text-right">742</td>
+                        <td class="text-right">710</td>
+                    </tr>
+                    <tr>
+                        <td>Semana 2</td>
+                        <td>08/10 - 14/10</td>
+                        <td class="text-right">768</td>
+                        <td class="text-right">729</td>
+                    </tr>
+                    <tr>
+                        <td>Semana 3</td>
+                        <td>15/10 - 21/10</td>
+                        <td class="text-right">755</td>
+                        <td class="text-right">715</td>
+                    </tr>
+                    <tr>
+                        <td>Semana 4</td>
+                        <td>22/10 - 31/10</td>
+                        <td class="text-right">745</td>
+                        <td class="text-right">706</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div style="background: #e8f5e9; padding: 15px; margin-top: 15px; border-left: 4px solid #27ae60;">
+                <p style="font-size: 11px; font-weight: bold; margin-bottom: 5px;">OBSERVACIONES:</p>
+                <p style="font-size: 10px;">
+                    ✓ El cumplimiento global supera la meta institucional<br>
+                    ✓ Emergencia mantiene el mejor desempeño (99.6%)<br>
+                    ⚠ Atención de crónicos requiere seguimiento (90.0%)
+                </p>
+            </div>
+        </div>
+
+        <div class="report-footer">
+            <p>Sistema de Gestión Farmacéutica - H_Recetas</p>
+            <p>Dimensiones: Tiempo | Paciente | Tipo Receta</p>
+        </div>
+    </div>
+
+    <!-- REPORTE 4 -->
+    <div class="report-container">
+        <div class="report-header">
+            <h1>CONTROL DE VENCIMIENTOS</h1>
+        </div>
+        <div class="report-info">
+            <div class="report-info-row">
+                <span class="label">FECHA DE EMISIÓN:</span>
+                <span>11/11/2025 - 14:30 hrs</span>
+            </div>
+            <div class="report-info-row">
+                <span class="label">PERÍODO ANALIZADO:</span>
+                <span>OCTUBRE 2025</span>
+            </div>
+            <!-- <div class="report-info-row">
+                <span class="label">GRANULARIDAD:</span>
+                <span>Mes - Medicamento - Lote - Organización</span>
+            </div> -->
+            <!-- <div class="report-info-row">
+                <span class="label">TIPO DE REPORTE:</span>
+                <span>CONTROL DE CALIDAD</span>
+            </div> -->
+        </div>
+
+        <div class="report-body">
+            <!-- <div class="kpi-section">
+                <div class="kpi-title">ALERTA: INDICADOR DE VENCIMIENTO MENSUAL</div>
+                <div class="kpi-value">2.8%</div>
+                <div class="text-center">
+                    <span class="badge warning">NIVEL DE ALERTA</span>
+                </div>
+                <div class="divider"></div>
+                <div class="report-info-row">
+                    <span>Stock Inicial del Mes:</span>
+                    <span>48,500 unidades</span>
+                </div>
+                <div class="report-info-row">
+                    <span>Medicamentos Vencidos:</span>
+                    <span>1,358 unidades</span>
+                </div>
+                <div class="report-info-row">
+                    <span>Valor Económico Perdido:</span>
+                    <span>S/ 4,074.00</span>
+                </div>
+                <div
+                    style="margin-top: 10px; padding: 8px; background: #fff3cd; border-left: 3px solid #ffc107; font-size: 10px;">
+                    <strong>META INSTITUCIONAL:</strong> Mantener vencimientos ≤ 2.0%
+                </div>
+            </div> -->
+
+            <div class="section-title">DETALLE DE MEDICAMENTOS VENCIDOS</div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>CÓDIGO</th>
+                        <th>MEDICAMENTO</th>
+                        <th>LOTE</th>
+                        <th>FECHA VENC.</th>
+                        <th class="text-right">CANTIDAD</th>
+                        <th class="text-right">VALOR (S/)</th>
+                        <th>SEDE</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>MED-012</td>
+                        <td>Metformina 850mg</td>
+                        <td>LOT-24082A</td>
+                        <td>15/10/2025</td>
+                        <td class="text-right">450</td>
+                        <td class="text-right">1,350.00</td>
+                        <td>Hospital Central</td>
+                    </tr>
+                    <tr>
+                        <td>MED-008</td>
+                        <td>Atorvastatina 20mg</td>
+                        <td>LOT-24095B</td>
+                        <td>22/10/2025</td>
+                        <td class="text-right">320</td>
+                        <td class="text-right">1,280.00</td>
+                        <td>Clínica Norte</td>
+                    </tr>
+                    <tr>
+                        <td>MED-015</td>
+                        <td>Diclofenaco 50mg</td>
+                        <td>LOT-24071C</td>
+                        <td>10/10/2025</td>
+                        <td class="text-right">288</td>
+                        <td class="text-right">576.00</td>
+                        <td>Hospital Central</td>
+                    </tr>
+                    <tr>
+                        <td>MED-023</td>
+                        <td>Ranitidina 150mg</td>
+                        <td>LOT-24088D</td>
+                        <td>28/10/2025</td>
+                        <td class="text-right">180</td>
+                        <td class="text-right">540.00</td>
+                        <td>Centro Salud Sur</td>
+                    </tr>
+                    <tr>
+                        <td>MED-019</td>
+                        <td>Ciprofloxacino 500mg</td>
+                        <td>LOT-24092E</td>
+                        <td>18/10/2025</td>
+                        <td class="text-right">120</td>
+                        <td class="text-right">328.00</td>
+                        <td>Clínica Norte</td>
+                    </tr>
+                    <tr class="total-row">
+                        <td colspan="4" class="text-right">TOTAL VENCIDOS:</td>
+                        <td class="text-right">1,358</td>
+                        <td class="text-right">4,074.00</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="section-title">ANÁLISIS POR ORGANIZACIÓN</div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>SEDE</th>
+                        <th class="text-right">STOCK INICIAL</th>
+                        <th class="text-right">VENCIDOS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Hospital Central - Lima</td>
+                        <td class="text-right">28,000</td>
+                        <td class="text-right">738</td>
+                    </tr>
+                    <tr>
+                        <td>Clínica Norte - Trujillo</td>
+                        <td class="text-right">12,500</td>
+                        <td class="text-right">440</td>
+                    </tr>
+                    <tr>
+                        <td>Centro Salud Sur - Arequipa</td>
+                        <td class="text-right">8,000</td>
+                        <td class="text-right">180</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="section-title">MEDICAMENTOS PRÓXIMOS A VENCER (≤ 3 MESES)</div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>MEDICAMENTO</th>
+                        <th>LOTE</th>
+                        <th>FECHA VENC.</th>
+                        <th class="text-right">UNIDADES</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Aspirina 100mg</td>
+                        <td>LOT-24118A</td>
+                        <td>15/01/2026</td>
+                        <td class="text-right">2,400</td>
+                    </tr>
+                    <tr>
+                        <td>Salbutamol Inhalador</td>
+                        <td>LOT-24122B</td>
+                        <td>28/01/2026</td>
+                        <td class="text-right">850</td>
+                    </tr>
+                    <tr>
+                        <td>Insulina Glargina</td>
+                        <td>LOT-24109C</td>
+                        <td>05/12/2025</td>
+                        <td class="text-right">125</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div style="background: #ffebee; padding: 15px; margin-top: 15px; border-left: 4px solid #e74c3c;">
+                <p style="font-size: 11px; font-weight: bold; margin-bottom: 5px; color: #c0392b;">RECOMENDACIONES
+                    URGENTES:</p>
+                <p style="font-size: 10px;">
+                    1. Implementar sistema FEFO (First Expired, First Out) en todas las sedes<br>
+                    2. Reforzar capacitación en gestión de inventarios en Clínica Norte<br>
+                    3. Revisar política de compras para reducir sobrestock<br>
+                    4. Coordinar con áreas clínicas para rotación de medicamentos próximos a vencer
+                </p>
+            </div>
+        </div>
+
+        <div class="report-footer">
+            <p>Sistema de Gestión Farmacéutica - H_Inventario</p>
+            <p>Dimensiones: Tiempo | Medicamento | Lote | Organización</p>
+        </div>
+    </div>
+
+    <div
+        style="text-align: center; padding: 20px; font-family: 'Courier New', monospace; font-size: 11px; color: #7f8c8d;">
+        <p>═══════════════════════════════════════════════════════════</p>
+        <p><strong>FIN DE REPORTES</strong></p>
+        <p>Sistema de Gestión Farmacéutica v2.1 | Generado: 11/11/2025 14:30 hrs</p>
+        <p>═══════════════════════════════════════════════════════════</p>
+    </div>
+
+</body>
+
+</html>

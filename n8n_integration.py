@@ -108,7 +108,7 @@ class N8NIntegration:
     def generate_audio_guide(self, poi_id: str, poi_name: str, 
                            poi_description: str = "", 
                            user_id: str = "anonymous",
-                           voice_id: str = "21m00Tcm4TlvDq8ikWAM") -> Optional[Dict]:
+                           voice_id: str = "echo") -> Optional[Dict]:
         """
         Obtiene una audio-guía para un punto de interés usando el endpoint de n8n
         

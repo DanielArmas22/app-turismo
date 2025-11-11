@@ -74,27 +74,22 @@ def show_generate_audio(db, n8n):
     with col2:
         st.markdown("### ⚙️ Configuración")
         
-        # Voice ID de ElevenLabs
-        voice_options = {
-            "Rachel (Femenina)": "21m00Tcm4TlvDq8ikWAM",
-            "Domi (Femenina)": "AZnzlk1XvdvUeBnXmlld",
-            "Bella (Femenina)": "EXAVITQu4vr4xnSDxMaL",
-            "Antoni (Masculina)": "ErXwobaYiN019PkySvjV",
-            "Elli (Femenina)": "MF3mGyEYCl7XYWbV9V6O",
-            "Josh (Masculina)": "TxGEqnHWrfWFTfGW9XjX",
-            "Arnold (Masculina)": "VR6AewLTigWG4xSOukaG",
-            "Adam (Masculina)": "pNInz6obpgDQGcFmaJgB",
-            "Sam (Masculina)": "yoZ06aMxZJJ28mfd3POQ"
-        }
+        voice_labels = list(config.AUDIO_VOICES.keys())
+        default_voice = "Echo" if "Echo" in config.AUDIO_VOICES else voice_labels[0]
         selected_voice_name = st.selectbox(
-            "Voz", 
-            list(voice_options.keys()), 
-            index=0, 
+            "Voz",
+            voice_labels,
+            index=voice_labels.index(default_voice),
             key="audio_page_voice_selectbox"
         )
-        voice_id = voice_options[selected_voice_name]
+        custom_voice = st.text_input(
+            "Voz personalizada (opcional)",
+            placeholder="Ingresa el identificador exacto si necesitas una voz distinta...",
+            key="audio_page_custom_voice"
+        )
+        voice_id = custom_voice.strip() or config.AUDIO_VOICES[selected_voice_name]
         
-        st.info("💡 Selecciona la voz que prefieras para tu audio-guía")
+        st.info("💡 Selecciona una voz disponible o ingresa un identificador personalizado.")
     
     # Vista previa del POI
     with st.expander("👁️ Vista Previa del POI", expanded=False):
