@@ -184,14 +184,7 @@ Ejecutar con: jmeter -n -t jmeter_pruebas_parte2_supabase_write_n8n_advanced.jmx
             <collectionProp name="Arguments.arguments">
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">{&#xd;
-  "action_type": "get_audio_guide",&#xd;
-  "poi_id": "test-poi-${__threadNum}",&#xd;
-  "poi_name": "Lugar de Prueba ${__threadNum}",&#xd;
-  "poi_description": "Descripción de prueba para audio-guía",&#xd;
-  "user_id": "${USER_ID}",&#xd;
-  "voice_id": "echo"&#xd;
-}</stringProp>
+                <stringProp name="Argument.value">{&quot;action_type&quot;:&quot;get_audio_guide&quot;,&quot;poi_id&quot;:&quot;test-poi-${__threadNum}&quot;,&quot;poi_name&quot;:&quot;Lugar de Prueba ${__threadNum}&quot;,&quot;poi_description&quot;:&quot;Descripción de prueba para audio-guía&quot;,&quot;user_id&quot;:&quot;${USER_ID}&quot;,&quot;voice_id&quot;:&quot;echo&quot;}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
             </collectionProp>
@@ -205,7 +198,7 @@ Ejecutar con: jmeter -n -t jmeter_pruebas_parte2_supabase_write_n8n_advanced.jmx
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
           <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
           <stringProp name="HTTPSampler.connect_timeout"></stringProp>
           <stringProp name="HTTPSampler.response_timeout">120000</stringProp>
@@ -237,18 +230,7 @@ Ejecutar con: jmeter -n -t jmeter_pruebas_parte2_supabase_write_n8n_advanced.jmx
             <collectionProp name="Arguments.arguments">
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">{&#xd;
-  "action_type": "create_booking",&#xd;
-  "user_id": "${USER_ID}",&#xd;
-  "poi_id": "test-poi-${__threadNum}",&#xd;
-  "poi_name": "Lugar de Prueba ${__threadNum}",&#xd;
-  "booking_date": "${__time(yyyy-MM-dd'T'HH:mm:ss)}",&#xd;
-  "number_of_people": 2,&#xd;
-  "total_price": 25.50,&#xd;
-  "currency": "EUR",&#xd;
-  "contact_email": "test-${__threadNum}@test.com",&#xd;
-  "contact_phone": "+34600000000"&#xd;
-}</stringProp>
+                <stringProp name="Argument.value">{&quot;action_type&quot;:&quot;create_booking&quot;,&quot;user_id&quot;:&quot;${USER_ID}&quot;,&quot;poi_id&quot;:&quot;test-poi-${__threadNum}&quot;,&quot;poi_name&quot;:&quot;Lugar de Prueba ${__threadNum}&quot;,&quot;booking_date&quot;:&quot;${__time(yyyy-MM-dd'T'HH:mm:ss)}&quot;,&quot;number_of_people&quot;:2,&quot;total_price&quot;:25.50,&quot;currency&quot;:&quot;EUR&quot;,&quot;contact_email&quot;:&quot;test-${__threadNum}@test.com&quot;,&quot;contact_phone&quot;:&quot;+34600000000&quot;}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
             </collectionProp>
@@ -262,7 +244,7 @@ Ejecutar con: jmeter -n -t jmeter_pruebas_parte2_supabase_write_n8n_advanced.jmx
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
           <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
           <stringProp name="HTTPSampler.connect_timeout"></stringProp>
           <stringProp name="HTTPSampler.response_timeout">30000</stringProp>
@@ -367,13 +349,7 @@ Ejecutar con: jmeter -n -t jmeter_pruebas_parte2_supabase_write_n8n_advanced.jmx
             <collectionProp name="Arguments.arguments">
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">{&#xd;
-  "action_type": "get_poi_recommendations",&#xd;
-  "lat": 41.4036,&#xd;
-  "lng": 2.1744,&#xd;
-  "city_id": "barcelona",&#xd;
-  "user_id": "${USER_ID}"&#xd;
-}</stringProp>
+                <stringProp name="Argument.value">{&quot;action_type&quot;:&quot;get_poi_recommendations&quot;,&quot;lat&quot;:41.4036,&quot;lng&quot;:2.1744,&quot;city_id&quot;:&quot;barcelona&quot;,&quot;user_id&quot;:&quot;${USER_ID}&quot;}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
             </collectionProp>
@@ -387,7 +363,7 @@ Ejecutar con: jmeter -n -t jmeter_pruebas_parte2_supabase_write_n8n_advanced.jmx
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
           <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
           <stringProp name="HTTPSampler.connect_timeout"></stringProp>
           <stringProp name="HTTPSampler.response_timeout">30000</stringProp>
@@ -536,13 +512,7 @@ Ejecutar con: jmeter -n -t jmeter_pruebas_parte2_supabase_write_n8n_advanced.jmx
             <collectionProp name="Arguments.arguments">
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">{&#xd;
-  "action_type": "get_poi_recommendations",&#xd;
-  "lat": 41.4036,&#xd;
-  "lng": 2.1744,&#xd;
-  "city_id": "barcelona",&#xd;
-  "user_id": "${USER_ID}"&#xd;
-}</stringProp>
+                <stringProp name="Argument.value">{&quot;action_type&quot;:&quot;get_poi_recommendations&quot;,&quot;lat&quot;:41.4036,&quot;lng&quot;:2.1744,&quot;city_id&quot;:&quot;barcelona&quot;,&quot;user_id&quot;:&quot;${USER_ID}&quot;}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
             </collectionProp>
@@ -556,7 +526,7 @@ Ejecutar con: jmeter -n -t jmeter_pruebas_parte2_supabase_write_n8n_advanced.jmx
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
           <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
           <stringProp name="HTTPSampler.connect_timeout"></stringProp>
           <stringProp name="HTTPSampler.response_timeout">30000</stringProp>

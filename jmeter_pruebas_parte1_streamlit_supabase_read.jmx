@@ -53,7 +53,7 @@ Ejecutar con: jmeter -n -t jmeter_pruebas_parte1_streamlit_supabase_read.jmx -l 
         </elementProp>
       </ThreadGroup>
       <hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="1. Página Principal Streamlit" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="1. Página Principal Streamlit">
           <stringProp name="HTTPSampler.domain">localhost</stringProp>
           <stringProp name="HTTPSampler.port">8501</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -187,22 +187,22 @@ Ejecutar con: jmeter -n -t jmeter_pruebas_parte1_streamlit_supabase_read.jmx -l 
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-          <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
             <collectionProp name="Arguments.arguments">
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">{&#xd;
-  &quot;action_type&quot;: &quot;get_poi_recommendations&quot;,&#xd;
-  &quot;lat&quot;: 41.4036,&#xd;
-  &quot;lng&quot;: 2.1744,&#xd;
-  &quot;city_id&quot;: &quot;barcelona&quot;,&#xd;
-  &quot;user_id&quot;: &quot;test-user-${__threadNum}&quot;&#xd;
-}</stringProp>
+                <stringProp name="Argument.value">{&quot;action_type&quot;:&quot;get_poi_recommendations&quot;,&quot;lat&quot;:41.4036,&quot;lng&quot;:2.1744,&quot;city_id&quot;:&quot;barcelona&quot;,&quot;user_id&quot;:&quot;test-user-${__threadNum}&quot;}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
             </collectionProp>
           </elementProp>
+          <collectionProp name="HTTPSampler.headers">
+            <elementProp name="" elementType="Header">
+              <stringProp name="Header.name">Content-Type</stringProp>
+              <stringProp name="Header.value">application/json</stringProp>
+            </elementProp>
+          </collectionProp>
         </HTTPSamplerProxy>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert Response Code" enabled="true">
@@ -226,7 +226,7 @@ Ejecutar con: jmeter -n -t jmeter_pruebas_parte1_streamlit_supabase_read.jmx -l 
         </ConstantTimer>
         <hashTree/>
       </hashTree>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Grupo 2: Pruebas de Estrés (50-100 usuarios)">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Grupo 2: Pruebas de Estrés (50-100 usuarios)" enabled="true">
         <intProp name="ThreadGroup.num_threads">50</intProp>
         <intProp name="ThreadGroup.ramp_time">60</intProp>
         <longProp name="ThreadGroup.duration">300</longProp>
@@ -277,22 +277,22 @@ Ejecutar con: jmeter -n -t jmeter_pruebas_parte1_streamlit_supabase_read.jmx -l 
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-          <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
             <collectionProp name="Arguments.arguments">
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">{&#xd;
-  &quot;action_type&quot;: &quot;get_poi_recommendations&quot;,&#xd;
-  &quot;lat&quot;: 41.4036,&#xd;
-  &quot;lng&quot;: 2.1744,&#xd;
-  &quot;city_id&quot;: &quot;barcelona&quot;,&#xd;
-  &quot;user_id&quot;: &quot;stress-test-${__threadNum}&quot;&#xd;
-}</stringProp>
+                <stringProp name="Argument.value">{&quot;action_type&quot;:&quot;get_poi_recommendations&quot;,&quot;lat&quot;:41.4036,&quot;lng&quot;:2.1744,&quot;city_id&quot;:&quot;barcelona&quot;,&quot;user_id&quot;:&quot;stress-test-${__threadNum}&quot;}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
             </collectionProp>
           </elementProp>
+          <collectionProp name="HTTPSampler.headers">
+            <elementProp name="" elementType="Header">
+              <stringProp name="Header.name">Content-Type</stringProp>
+              <stringProp name="Header.value">application/json</stringProp>
+            </elementProp>
+          </collectionProp>
         </HTTPSamplerProxy>
         <hashTree/>
         <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Timer: Espera entre requests" enabled="true">
