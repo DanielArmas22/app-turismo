@@ -8,8 +8,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Configuración de Supabase
-SUPABASE_URL = os.getenv("SUPABASE_URL", "https://tciaojtfllfqroanvcuz.supabase.co")
-SUPABASE_KEY = os.getenv("SUPABASE_KEY", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjaWFvanRmbGxmcXJvYW52Y3V6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE3NjM3MjcsImV4cCI6MjA3NzMzOTcyN30.L4X57t6EUw8zXswAtMJniyY3A2MFCHvB1ClRKQf6XpE")
+SUPABASE_URL = os.getenv("SUPABASE_URL", "https://kwcfzhxlhmskjyowwcub.supabase.co")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt3Y2Z6aHhsaG1za2p5b3d3Y3ViIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI5Nzc1MzUsImV4cCI6MjA3ODU1MzUzNX0.NXT1f3YWQzh_yDU0aD0CdLmLAa3H2Jl3RB-eIoefKdI")
 
 # Configuración de n8n
 N8N_WEBHOOK_URL = os.getenv("N8N_WEBHOOK_URL", "https://n8n.yamboly.lat/webhook/tourist-guide")
