@@ -5,7 +5,7 @@ from supabase import create_client, Client
 from typing import List, Dict, Optional, Any
 import streamlit as st
 from datetime import datetime
-import config
+import config.config as config
 from functools import lru_cache
 
 class SupabaseDB:
@@ -212,7 +212,9 @@ class SupabaseDB:
     def create_user(self, user_data: Dict) -> Optional[Dict]:
         """Crea un nuevo usuario"""
         try:
-            response = self.client.table("users").insert(user_data).execute()
+            payload = dict(user_data)
+            payload.setdefault("role", "user")
+            response = self.client.table("users").insert(payload).execute()
             return self._handle_single_response(response)
         except Exception as e:
             st.error(f"Error al crear usuario: {str(e)}")

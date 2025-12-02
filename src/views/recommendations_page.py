@@ -5,7 +5,7 @@ import streamlit as st
 import pandas as pd
 from datetime import datetime
 from typing import Any, Dict, List
-import config
+import config.config as config
 
 def show(db, n8n):
     """Muestra la página de recomendaciones personalizadas"""

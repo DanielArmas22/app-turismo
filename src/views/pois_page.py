@@ -4,7 +4,7 @@ Página de Puntos de Interés
 import streamlit as st
 import pandas as pd
 from typing import Dict, List, Optional
-import config
+import config.config as config
 
 def show(db, n8n):
     """Muestra la página de puntos de interés"""

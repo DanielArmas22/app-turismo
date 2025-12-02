@@ -2,7 +2,7 @@
 Página de Audio-Guías
 """
 import streamlit as st
-import config
+import config.config as config
 import os
 from datetime import datetime
 

@@ -3,8 +3,8 @@ Aplicación Principal - Guía Turística Virtual
 """
 import streamlit as st
 from database import get_database
-from n8n_integration import get_n8n_integration
-import config
+from n8n import get_n8n_integration
+import config.config as config
 # Configuración de la página
 st.set_page_config(
     page_title=config.APP_TITLE,
@@ -34,6 +34,23 @@ if 'show_city_detail' not in st.session_state:
     st.session_state.show_city_detail = False
 if 'main_menu' not in st.session_state:
     st.session_state.main_menu = "🏠 Inicio"
+
+
+def ensure_user_role(user: dict | None) -> dict | None:
+    """Garantiza que el diccionario de usuario siempre tenga un rol válido."""
+    if not user:
+        return user
+    if not user.get("role"):
+        user["role"] = "user"
+    return user
+
+
+def get_current_role() -> str:
+    """Obtiene el rol asociado al usuario actual."""
+    user_data = st.session_state.get("user_data") or {}
+    if st.session_state.get("user_id"):
+        return user_data.get("role", "user")
+    return "guest"
 
 
 def navigate_to_city(city_id: str):
@@ -1006,12 +1023,21 @@ with st.sidebar:
                         st.success(f"¡Bienvenido {name}! 🎉")
                 
                 if user:
+                    user = ensure_user_role(user)
                     st.session_state.user_id = user['id']
                     st.session_state.user_email = user['email']
                     st.session_state.user_data = user
                     st.rerun()
     else:
-        user_data = st.session_state.user_data
+        user_data = ensure_user_role(st.session_state.user_data)
+        st.session_state.user_data = user_data
+        user_role = get_current_role()
+        role_labels = {
+            "admin": "Administrador",
+            "user": "Explorador",
+            "guest": "Invitado"
+        }
+        role_badge = role_labels.get(user_role, user_role.title())
         st.markdown(f"""
         <div class="sidebar-card fade-in">
             <div style="display:flex; align-items:center; justify-content:space-between; gap:0.5rem;">
@@ -1019,7 +1045,10 @@ with st.sidebar:
                     <div class="sidebar-section-title">Mi perfil</div>
                     <strong>👤 {user_data['name']}</strong>
                 </div>
-                <span class="badge">{user_data['subscription_tier'].title()}</span>
+                <div style="display:flex; gap:0.35rem; flex-wrap:wrap;">
+                    <span class="badge">{user_data['subscription_tier'].title()}</span>
+                    <span class="badge">{role_badge}</span>
+                </div>
             </div>
             <div style="margin-top:0.75rem;">
                 <small style="color:var(--text-muted);">Puntos acumulados</small>
@@ -1041,23 +1070,35 @@ with st.sidebar:
     </div>
     """, unsafe_allow_html=True)
 
-    menu_options = {
-        "🏠 Inicio": "home",
-        "🌍 Explorar Ciudades": "cities",
-        "📍 Puntos de Interés": "pois",
-        "🎯 Recomendaciones": "recommendations",
-        "🎧 Audio-Guías": "audio",
-        "🎫 Mis Reservas": "bookings",
-        "⭐ Favoritos": "favorites",
-        "🎮 Gamificación": "achievements",
-        "📊 Estadísticas": "stats",
-        "📄 Reportes": "reports",
-        "⚙️ Administración": "admin"
-    }
+    current_role = get_current_role()
+    is_admin = current_role == "admin"
+    
+    menu_sequence = [
+        ("🏠 Inicio", "home"),
+        ("🌍 Explorar Ciudades", "cities"),
+        ("📍 Puntos de Interés", "pois"),
+        ("🎯 Recomendaciones", "recommendations"),
+        ("🎧 Audio-Guías", "audio"),
+        ("🎫 Mis Reservas", "bookings"),
+        ("⭐ Favoritos", "favorites"),
+        ("🎮 Gamificación", "achievements"),
+        ("📄 Reportes", "reports")
+    ]
+    
+    if is_admin:
+        menu_sequence.extend([
+            ("📊 Estadísticas", "stats"),
+            ("⚙️ Administración", "admin")
+        ])
+    
+    menu_options = dict(menu_sequence)
+    available_menu_labels = list(menu_options.keys())
+    if st.session_state.main_menu not in available_menu_labels:
+        st.session_state.main_menu = available_menu_labels[0]
     
     selected_page = st.radio(
         "Selecciona una página",
-        list(menu_options.keys()),
+        available_menu_labels,
         label_visibility="collapsed",
         key="main_menu"
     )

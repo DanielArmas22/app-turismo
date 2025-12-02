@@ -5,7 +5,7 @@ import requests
 from typing import Dict, Optional, Any
 import streamlit as st
 from datetime import datetime
-import config
+import config.config as config
 
 class N8NIntegration:
     """Clase para manejar todas las integraciones con n8n"""

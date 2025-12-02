@@ -3,8 +3,10 @@ requests>=2.31.0
 pandas>=2.0.0
 plotly>=5.18.0
 fpdf==1.7.2
+openpyxl>=3.1.0
 supabase>=2.9.0
 python-dotenv>=1.0.0
 numpy>=1.24.0
 Pillow>=10.0.0
 httpx>=0.27.0
+matplotlib>=3.7.0

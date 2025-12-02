@@ -1,0 +1,9 @@
+Label,# Samples,Average,Min,Max,Std. Dev.,Error %,Throughput,Received KB/sec,Sent KB/sec,Avg. Bytes
+1. Página Principal Streamlit,341,8,1,99,8.21,0.000%,5.70988,10.64,3.51,1908.0
+2. Página Explorar Ciudades,85,2,1,6,1.12,0.000%,1.46390,2.73,0.93,1908.0
+2. API Supabase - GET Ciudades,236,229,127,751,92.94,0.424%,4.13745,22.75,2.73,5630.2
+3. API Supabase - GET Ciudades,84,248,128,1167,158.57,1.190%,1.45261,7.96,0.95,5611.4
+4. API Supabase - GET POIs,81,209,51,358,53.25,1.235%,1.45681,26.02,0.97,18287.0
+3. n8n Webhook - Recomendaciones,222,228,14,477,101.29,1.802%,4.06512,8.56,3.17,2157.0
+5. n8n Webhook - Recomendaciones,78,215,150,489,83.78,0.000%,1.43903,3.01,1.14,2143.0
+TOTAL,1127,144,1,1167,133.72,0.621%,18.79712,77.21,12.73,4206.0

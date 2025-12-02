@@ -6,7 +6,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 from datetime import datetime, timedelta
-import config
+import config.config as config
 
 def show(db, n8n):
     """Muestra la página de administración"""

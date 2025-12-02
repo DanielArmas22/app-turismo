@@ -82,6 +82,43 @@ Ejecutar con: jmeter -n -t jmeter_pruebas_parte1_streamlit_supabase_read.jmx -l 
             <stringProp name="DurationAssertion.duration">3000</stringProp>
           </DurationAssertion>
           <hashTree/>
+          <ResultCollector guiclass="GraphVisualizer" testclass="ResultCollector" testname="Graph Results" enabled="true">
+            <boolProp name="ResultCollector.error_logging">true</boolProp>
+            <objProp>
+              <name>saveConfig</name>
+              <value class="SampleSaveConfiguration">
+                <time>true</time>
+                <latency>true</latency>
+                <timestamp>true</timestamp>
+                <success>true</success>
+                <label>true</label>
+                <code>true</code>
+                <message>true</message>
+                <threadName>true</threadName>
+                <dataType>true</dataType>
+                <encoding>false</encoding>
+                <assertions>true</assertions>
+                <subresults>true</subresults>
+                <responseData>false</responseData>
+                <samplerData>false</samplerData>
+                <xml>false</xml>
+                <fieldNames>true</fieldNames>
+                <responseHeaders>false</responseHeaders>
+                <requestHeaders>false</requestHeaders>
+                <responseDataOnError>false</responseDataOnError>
+                <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+                <assertionsResultsToSave>0</assertionsResultsToSave>
+                <bytes>true</bytes>
+                <sentBytes>true</sentBytes>
+                <url>true</url>
+                <threadCounts>true</threadCounts>
+                <idleTime>true</idleTime>
+                <connectTime>true</connectTime>
+              </value>
+            </objProp>
+            <stringProp name="filename"></stringProp>
+          </ResultCollector>
+          <hashTree/>
         </hashTree>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="2. Página Explorar Ciudades" enabled="true">
           <stringProp name="HTTPSampler.domain">localhost</stringProp>
@@ -98,6 +135,7 @@ Ejecutar con: jmeter -n -t jmeter_pruebas_parte1_streamlit_supabase_read.jmx -l 
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
                 <stringProp name="Argument.value">cities</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
               </elementProp>
             </collectionProp>
           </elementProp>
@@ -115,6 +153,27 @@ Ejecutar con: jmeter -n -t jmeter_pruebas_parte1_streamlit_supabase_read.jmx -l 
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
+        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager - Supabase Auth" enabled="true">
+          <collectionProp name="HeaderManager.headers">
+            <elementProp name="" elementType="Header">
+              <stringProp name="Header.name">apikey</stringProp>
+              <stringProp name="Header.value">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjaWFvanRmbGxmcXJvYW52Y3V6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE3NjM3MjcsImV4cCI6MjA3NzMzOTcyN30.L4X57t6EUw8zXswAtMJniyY3A2MFCHvB1ClRKQf6XpE</stringProp>
+            </elementProp>
+            <elementProp name="" elementType="Header">
+              <stringProp name="Header.name">Authorization</stringProp>
+              <stringProp name="Header.value">Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjaWFvanRmbGxmcXJvYW52Y3V6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE3NjM3MjcsImV4cCI6MjA3NzMzOTcyN30.L4X57t6EUw8zXswAtMJniyY3A2MFCHvB1ClRKQf6XpE</stringProp>
+            </elementProp>
+            <elementProp name="" elementType="Header">
+              <stringProp name="Header.name">Content-Type</stringProp>
+              <stringProp name="Header.value">application/json</stringProp>
+            </elementProp>
+            <elementProp name="" elementType="Header">
+              <stringProp name="Header.name">Prefer</stringProp>
+              <stringProp name="Header.value">return=representation</stringProp>
+            </elementProp>
+          </collectionProp>
+        </HeaderManager>
+        <hashTree/>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="3. API Supabase - GET Ciudades" enabled="true">
           <intProp name="HTTPSampler.response_timeout">10000</intProp>
           <stringProp name="HTTPSampler.domain">tciaojtfllfqroanvcuz.supabase.co</stringProp>
@@ -151,6 +210,27 @@ Ejecutar con: jmeter -n -t jmeter_pruebas_parte1_streamlit_supabase_read.jmx -l 
           </JSONPathAssertion>
           <hashTree/>
         </hashTree>
+        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager - Supabase Auth" enabled="true">
+          <collectionProp name="HeaderManager.headers">
+            <elementProp name="" elementType="Header">
+              <stringProp name="Header.name">apikey</stringProp>
+              <stringProp name="Header.value">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjaWFvanRmbGxmcXJvYW52Y3V6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE3NjM3MjcsImV4cCI6MjA3NzMzOTcyN30.L4X57t6EUw8zXswAtMJniyY3A2MFCHvB1ClRKQf6XpE</stringProp>
+            </elementProp>
+            <elementProp name="" elementType="Header">
+              <stringProp name="Header.name">Authorization</stringProp>
+              <stringProp name="Header.value">Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjaWFvanRmbGxmcXJvYW52Y3V6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE3NjM3MjcsImV4cCI6MjA3NzMzOTcyN30.L4X57t6EUw8zXswAtMJniyY3A2MFCHvB1ClRKQf6XpE</stringProp>
+            </elementProp>
+            <elementProp name="" elementType="Header">
+              <stringProp name="Header.name">Content-Type</stringProp>
+              <stringProp name="Header.value">application/json</stringProp>
+            </elementProp>
+            <elementProp name="" elementType="Header">
+              <stringProp name="Header.name">Prefer</stringProp>
+              <stringProp name="Header.value">return=representation</stringProp>
+            </elementProp>
+          </collectionProp>
+        </HeaderManager>
+        <hashTree/>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="4. API Supabase - GET POIs" enabled="true">
           <intProp name="HTTPSampler.response_timeout">10000</intProp>
           <stringProp name="HTTPSampler.domain">tciaojtfllfqroanvcuz.supabase.co</stringProp>
@@ -256,6 +336,27 @@ Ejecutar con: jmeter -n -t jmeter_pruebas_parte1_streamlit_supabase_read.jmx -l 
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree/>
+        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager - Supabase Auth" enabled="true">
+          <collectionProp name="HeaderManager.headers">
+            <elementProp name="" elementType="Header">
+              <stringProp name="Header.name">apikey</stringProp>
+              <stringProp name="Header.value">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjaWFvanRmbGxmcXJvYW52Y3V6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE3NjM3MjcsImV4cCI6MjA3NzMzOTcyN30.L4X57t6EUw8zXswAtMJniyY3A2MFCHvB1ClRKQf6XpE</stringProp>
+            </elementProp>
+            <elementProp name="" elementType="Header">
+              <stringProp name="Header.name">Authorization</stringProp>
+              <stringProp name="Header.value">Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjaWFvanRmbGxmcXJvYW52Y3V6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE3NjM3MjcsImV4cCI6MjA3NzMzOTcyN30.L4X57t6EUw8zXswAtMJniyY3A2MFCHvB1ClRKQf6XpE</stringProp>
+            </elementProp>
+            <elementProp name="" elementType="Header">
+              <stringProp name="Header.name">Content-Type</stringProp>
+              <stringProp name="Header.value">application/json</stringProp>
+            </elementProp>
+            <elementProp name="" elementType="Header">
+              <stringProp name="Header.name">Prefer</stringProp>
+              <stringProp name="Header.value">return=representation</stringProp>
+            </elementProp>
+          </collectionProp>
+        </HeaderManager>
+        <hashTree/>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="2. API Supabase - GET Ciudades" enabled="true">
           <intProp name="HTTPSampler.response_timeout">10000</intProp>
           <stringProp name="HTTPSampler.domain">tciaojtfllfqroanvcuz.supabase.co</stringProp>
@@ -340,7 +441,7 @@ Ejecutar con: jmeter -n -t jmeter_pruebas_parte1_streamlit_supabase_read.jmx -l 
             <connectTime>true</connectTime>
           </value>
         </objProp>
-        <stringProp name="filename"></stringProp>
+        <stringProp name="filename">C:\apache-jmeter-5.6.3\bin\resultados_parte1_resumen.jtl</stringProp>
       </ResultCollector>
       <hashTree/>
       <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
@@ -377,10 +478,10 @@ Ejecutar con: jmeter -n -t jmeter_pruebas_parte1_streamlit_supabase_read.jmx -l 
             <connectTime>true</connectTime>
           </value>
         </objProp>
-        <stringProp name="filename"></stringProp>
+        <stringProp name="filename">resultados_parte1_detalle.jtl</stringProp>
       </ResultCollector>
       <hashTree/>
-      <ResultCollector guiclass="StatGraphVisualizer" testclass="ResultCollector" testname="Graph Results" enabled="true">
+      <ResultCollector guiclass="GraphVisualizer" testclass="ResultCollector" testname="Graph Results" enabled="true">
         <boolProp name="ResultCollector.error_logging">false</boolProp>
         <objProp>
           <name>saveConfig</name>
@@ -414,7 +515,12 @@ Ejecutar con: jmeter -n -t jmeter_pruebas_parte1_streamlit_supabase_read.jmx -l 
             <connectTime>true</connectTime>
           </value>
         </objProp>
-        <stringProp name="filename"></stringProp>
+        <boolProp name="GraphVisualizer.showData">true</boolProp>
+        <boolProp name="GraphVisualizer.showMean">true</boolProp>
+        <boolProp name="GraphVisualizer.showMedian">true</boolProp>
+        <boolProp name="GraphVisualizer.showDeviation">true</boolProp>
+        <boolProp name="GraphVisualizer.showThroughput">true</boolProp>
+        <stringProp name="filename">resultados_parte1_grafico.jtl</stringProp>
       </ResultCollector>
       <hashTree/>
     </hashTree>

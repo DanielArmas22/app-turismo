@@ -8,7 +8,7 @@ from typing import Dict, List, Optional
 from datetime import datetime
 import pandas as pd
 
-import config
+import config.config as config
 from .bookings_page import create_booking as bookings_create_booking
 from .audio_page import generate_audio_guide as audio_generate
 

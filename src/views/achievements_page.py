@@ -8,7 +8,7 @@ import pandas as pd
 import plotly.express as px
 import streamlit as st
 
-import config
+import config.config as config
 
 
 def show(db, n8n):

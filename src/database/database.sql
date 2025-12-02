@@ -19,6 +19,7 @@ CREATE TABLE users (
     total_points INTEGER DEFAULT 0,
     level VARCHAR(50) DEFAULT 'Explorador Novato',
     avatar_url TEXT,
+    role VARCHAR(50) DEFAULT 'user',
     preferences JSONB DEFAULT '{}',
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW()
@@ -27,6 +28,12 @@ CREATE TABLE users (
 -- Índices para usuarios
 CREATE INDEX idx_users_email ON users(email);
 CREATE INDEX idx_users_subscription ON users(subscription_tier);
+CREATE INDEX IF NOT EXISTS idx_users_role ON users(role);
+ALTER TABLE users
+    ADD COLUMN IF NOT EXISTS role VARCHAR(50) DEFAULT 'user';
+UPDATE users
+SET role = 'user'
+WHERE role IS NULL OR role = '';
 
 -- ============================================
 -- TABLA: cities (Ciudades)

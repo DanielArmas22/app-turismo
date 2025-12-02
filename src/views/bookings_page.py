@@ -3,7 +3,7 @@ Página de Reservas
 """
 import streamlit as st
 from datetime import datetime, timedelta
-import config
+import config.config as config
 
 def show(db, n8n):
     """Muestra la página de reservas"""
