@@ -78,19 +78,19 @@ Ejecutar con: jmeter -n -t jmeter_pruebas_parte2_supabase_write_n8n_advanced.jmx
           <stringProp name="HTTPSampler.connect_timeout"></stringProp>
           <stringProp name="HTTPSampler.response_timeout">10000</stringProp>
           <collectionProp name="HTTPSampler.headers">
-            <elementProp name="" elementType="HTTPHeader">
+            <elementProp name="" elementType="Header">
               <stringProp name="Header.name">apikey</stringProp>
               <stringProp name="Header.value">${SUPABASE_KEY}</stringProp>
             </elementProp>
-            <elementProp name="" elementType="HTTPHeader">
+            <elementProp name="" elementType="Header">
               <stringProp name="Header.name">Authorization</stringProp>
               <stringProp name="Header.value">Bearer ${SUPABASE_KEY}</stringProp>
             </elementProp>
-            <elementProp name="" elementType="HTTPHeader">
+            <elementProp name="" elementType="Header">
               <stringProp name="Header.name">Content-Type</stringProp>
               <stringProp name="Header.value">application/json</stringProp>
             </elementProp>
-            <elementProp name="" elementType="HTTPHeader">
+            <elementProp name="" elementType="Header">
               <stringProp name="Header.name">Prefer</stringProp>
               <stringProp name="Header.value">return=representation</stringProp>
             </elementProp>
@@ -98,9 +98,9 @@ Ejecutar con: jmeter -n -t jmeter_pruebas_parte2_supabase_write_n8n_advanced.jmx
         </HTTPSamplerProxy>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert Response Code" enabled="true">
-            <collectionProp name="Asserion.test_strings">
-              <stringProp>201</stringProp>
-              <stringProp>200</stringProp>
+            <collectionProp name="Assertion.test_strings">
+              <stringProp name="">201</stringProp>
+              <stringProp name="">200</stringProp>
             </collectionProp>
             <stringProp name="Assertion.custom_message">Error: No se pudo crear el usuario</stringProp>
             <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
@@ -148,19 +148,19 @@ Ejecutar con: jmeter -n -t jmeter_pruebas_parte2_supabase_write_n8n_advanced.jmx
           <stringProp name="HTTPSampler.connect_timeout"></stringProp>
           <stringProp name="HTTPSampler.response_timeout">10000</stringProp>
           <collectionProp name="HTTPSampler.headers">
-            <elementProp name="" elementType="HTTPHeader">
+            <elementProp name="" elementType="Header">
               <stringProp name="Header.name">apikey</stringProp>
               <stringProp name="Header.value">${SUPABASE_KEY}</stringProp>
             </elementProp>
-            <elementProp name="" elementType="HTTPHeader">
+            <elementProp name="" elementType="Header">
               <stringProp name="Header.name">Authorization</stringProp>
               <stringProp name="Header.value">Bearer ${SUPABASE_KEY}</stringProp>
             </elementProp>
-            <elementProp name="" elementType="HTTPHeader">
+            <elementProp name="" elementType="Header">
               <stringProp name="Header.name">Content-Type</stringProp>
               <stringProp name="Header.value">application/json</stringProp>
             </elementProp>
-            <elementProp name="" elementType="HTTPHeader">
+            <elementProp name="" elementType="Header">
               <stringProp name="Header.name">Prefer</stringProp>
               <stringProp name="Header.value">return=representation</stringProp>
             </elementProp>
@@ -168,9 +168,9 @@ Ejecutar con: jmeter -n -t jmeter_pruebas_parte2_supabase_write_n8n_advanced.jmx
         </HTTPSamplerProxy>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert Response Code" enabled="true">
-            <collectionProp name="Asserion.test_strings">
-              <stringProp>201</stringProp>
-              <stringProp>200</stringProp>
+            <collectionProp name="Assertion.test_strings">
+              <stringProp name="">201</stringProp>
+              <stringProp name="">200</stringProp>
             </collectionProp>
             <stringProp name="Assertion.custom_message">Error: No se pudo crear la estadística</stringProp>
             <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
@@ -210,7 +210,7 @@ Ejecutar con: jmeter -n -t jmeter_pruebas_parte2_supabase_write_n8n_advanced.jmx
           <stringProp name="HTTPSampler.connect_timeout"></stringProp>
           <stringProp name="HTTPSampler.response_timeout">120000</stringProp>
           <collectionProp name="HTTPSampler.headers">
-            <elementProp name="" elementType="HTTPHeader">
+            <elementProp name="" elementType="Header">
               <stringProp name="Header.name">Content-Type</stringProp>
               <stringProp name="Header.value">application/json</stringProp>
             </elementProp>
@@ -218,8 +218,8 @@ Ejecutar con: jmeter -n -t jmeter_pruebas_parte2_supabase_write_n8n_advanced.jmx
         </HTTPSamplerProxy>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert Response Code" enabled="true">
-            <collectionProp name="Asserion.test_strings">
-              <stringProp>200</stringProp>
+            <collectionProp name="Assertion.test_strings">
+              <stringProp name="">200</stringProp>
             </collectionProp>
             <stringProp name="Assertion.custom_message">Error: No se pudo generar el audio-guía</stringProp>
             <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
@@ -267,7 +267,7 @@ Ejecutar con: jmeter -n -t jmeter_pruebas_parte2_supabase_write_n8n_advanced.jmx
           <stringProp name="HTTPSampler.connect_timeout"></stringProp>
           <stringProp name="HTTPSampler.response_timeout">30000</stringProp>
           <collectionProp name="HTTPSampler.headers">
-            <elementProp name="" elementType="HTTPHeader">
+            <elementProp name="" elementType="Header">
               <stringProp name="Header.name">Content-Type</stringProp>
               <stringProp name="Header.value">application/json</stringProp>
             </elementProp>
@@ -275,9 +275,9 @@ Ejecutar con: jmeter -n -t jmeter_pruebas_parte2_supabase_write_n8n_advanced.jmx
         </HTTPSamplerProxy>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert Response Code" enabled="true">
-            <collectionProp name="Asserion.test_strings">
-              <stringProp>200</stringProp>
-              <stringProp>201</stringProp>
+            <collectionProp name="Assertion.test_strings">
+              <stringProp name="">200</stringProp>
+              <stringProp name="">201</stringProp>
             </collectionProp>
             <stringProp name="Assertion.custom_message">Error: No se pudo crear la reserva</stringProp>
             <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
@@ -334,19 +334,19 @@ Ejecutar con: jmeter -n -t jmeter_pruebas_parte2_supabase_write_n8n_advanced.jmx
           <stringProp name="HTTPSampler.connect_timeout"></stringProp>
           <stringProp name="HTTPSampler.response_timeout">10000</stringProp>
           <collectionProp name="HTTPSampler.headers">
-            <elementProp name="" elementType="HTTPHeader">
+            <elementProp name="" elementType="Header">
               <stringProp name="Header.name">apikey</stringProp>
               <stringProp name="Header.value">${SUPABASE_KEY}</stringProp>
             </elementProp>
-            <elementProp name="" elementType="HTTPHeader">
+            <elementProp name="" elementType="Header">
               <stringProp name="Header.name">Authorization</stringProp>
               <stringProp name="Header.value">Bearer ${SUPABASE_KEY}</stringProp>
             </elementProp>
-            <elementProp name="" elementType="HTTPHeader">
+            <elementProp name="" elementType="Header">
               <stringProp name="Header.name">Content-Type</stringProp>
               <stringProp name="Header.value">application/json</stringProp>
             </elementProp>
-            <elementProp name="" elementType="HTTPHeader">
+            <elementProp name="" elementType="Header">
               <stringProp name="Header.name">Prefer</stringProp>
               <stringProp name="Header.value">return=representation</stringProp>
             </elementProp>
@@ -392,7 +392,7 @@ Ejecutar con: jmeter -n -t jmeter_pruebas_parte2_supabase_write_n8n_advanced.jmx
           <stringProp name="HTTPSampler.connect_timeout"></stringProp>
           <stringProp name="HTTPSampler.response_timeout">30000</stringProp>
           <collectionProp name="HTTPSampler.headers">
-            <elementProp name="" elementType="HTTPHeader">
+            <elementProp name="" elementType="Header">
               <stringProp name="Header.name">Content-Type</stringProp>
               <stringProp name="Header.value">application/json</stringProp>
             </elementProp>
@@ -437,19 +437,19 @@ Ejecutar con: jmeter -n -t jmeter_pruebas_parte2_supabase_write_n8n_advanced.jmx
           <stringProp name="HTTPSampler.connect_timeout"></stringProp>
           <stringProp name="HTTPSampler.response_timeout">10000</stringProp>
           <collectionProp name="HTTPSampler.headers">
-            <elementProp name="" elementType="HTTPHeader">
+            <elementProp name="" elementType="Header">
               <stringProp name="Header.name">apikey</stringProp>
               <stringProp name="Header.value">${SUPABASE_KEY}</stringProp>
             </elementProp>
-            <elementProp name="" elementType="HTTPHeader">
+            <elementProp name="" elementType="Header">
               <stringProp name="Header.name">Authorization</stringProp>
               <stringProp name="Header.value">Bearer ${SUPABASE_KEY}</stringProp>
             </elementProp>
-            <elementProp name="" elementType="HTTPHeader">
+            <elementProp name="" elementType="Header">
               <stringProp name="Header.name">Content-Type</stringProp>
               <stringProp name="Header.value">application/json</stringProp>
             </elementProp>
-            <elementProp name="" elementType="HTTPHeader">
+            <elementProp name="" elementType="Header">
               <stringProp name="Header.name">Prefer</stringProp>
               <stringProp name="Header.value">return=representation</stringProp>
             </elementProp>
@@ -503,19 +503,19 @@ Ejecutar con: jmeter -n -t jmeter_pruebas_parte2_supabase_write_n8n_advanced.jmx
           <stringProp name="HTTPSampler.connect_timeout"></stringProp>
           <stringProp name="HTTPSampler.response_timeout">10000</stringProp>
           <collectionProp name="HTTPSampler.headers">
-            <elementProp name="" elementType="HTTPHeader">
+            <elementProp name="" elementType="Header">
               <stringProp name="Header.name">apikey</stringProp>
               <stringProp name="Header.value">${SUPABASE_KEY}</stringProp>
             </elementProp>
-            <elementProp name="" elementType="HTTPHeader">
+            <elementProp name="" elementType="Header">
               <stringProp name="Header.name">Authorization</stringProp>
               <stringProp name="Header.value">Bearer ${SUPABASE_KEY}</stringProp>
             </elementProp>
-            <elementProp name="" elementType="HTTPHeader">
+            <elementProp name="" elementType="Header">
               <stringProp name="Header.name">Content-Type</stringProp>
               <stringProp name="Header.value">application/json</stringProp>
             </elementProp>
-            <elementProp name="" elementType="HTTPHeader">
+            <elementProp name="" elementType="Header">
               <stringProp name="Header.name">Prefer</stringProp>
               <stringProp name="Header.value">return=representation</stringProp>
             </elementProp>
@@ -561,7 +561,7 @@ Ejecutar con: jmeter -n -t jmeter_pruebas_parte2_supabase_write_n8n_advanced.jmx
           <stringProp name="HTTPSampler.connect_timeout"></stringProp>
           <stringProp name="HTTPSampler.response_timeout">30000</stringProp>
           <collectionProp name="HTTPSampler.headers">
-            <elementProp name="" elementType="HTTPHeader">
+            <elementProp name="" elementType="Header">
               <stringProp name="Header.name">Content-Type</stringProp>
               <stringProp name="Header.value">application/json</stringProp>
             </elementProp>
