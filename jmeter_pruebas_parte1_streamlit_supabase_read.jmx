@@ -53,7 +53,7 @@ Ejecutar con: jmeter -n -t jmeter_pruebas_parte1_streamlit_supabase_read.jmx -l 
         </elementProp>
       </ThreadGroup>
       <hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="1. Página Principal Streamlit">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="1. Página Principal Streamlit" enabled="true">
           <stringProp name="HTTPSampler.domain">localhost</stringProp>
           <stringProp name="HTTPSampler.port">8501</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -178,6 +178,15 @@ Ejecutar con: jmeter -n -t jmeter_pruebas_parte1_streamlit_supabase_read.jmx -l 
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
+        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager - n8n JSON" enabled="true">
+          <collectionProp name="HeaderManager.headers">
+            <elementProp name="" elementType="Header">
+              <stringProp name="Header.name">Content-Type</stringProp>
+              <stringProp name="Header.value">application/json</stringProp>
+            </elementProp>
+          </collectionProp>
+        </HeaderManager>
+        <hashTree/>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="5. n8n Webhook - Recomendaciones" enabled="true">
           <intProp name="HTTPSampler.response_timeout">30000</intProp>
           <stringProp name="HTTPSampler.domain">n8n.yamboly.lat</stringProp>
@@ -188,21 +197,15 @@ Ejecutar con: jmeter -n -t jmeter_pruebas_parte1_streamlit_supabase_read.jmx -l 
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
           <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
-          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
             <collectionProp name="Arguments.arguments">
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">{&quot;action_type&quot;:&quot;get_poi_recommendations&quot;,&quot;lat&quot;:41.4036,&quot;lng&quot;:2.1744,&quot;city_id&quot;:&quot;barcelona&quot;,&quot;user_id&quot;:&quot;test-user-${__threadNum}&quot;}</stringProp>
+                <stringProp name="Argument.value">{&quot;action_type&quot;:&quot;get_poi_recommendations&quot;,&quot;lat&quot;:41.4036,&quot;lng&quot;:2.1744,&quot;city_id&quot;:&quot;barcelona&quot;,&quot;user_id&quot;:&quot;08e8c7e9-59e8-4d4e-8524-d1235fd5a14c&quot;}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
             </collectionProp>
           </elementProp>
-          <collectionProp name="HTTPSampler.headers">
-            <elementProp name="" elementType="Header">
-              <stringProp name="Header.name">Content-Type</stringProp>
-              <stringProp name="Header.value">application/json</stringProp>
-            </elementProp>
-          </collectionProp>
         </HTTPSamplerProxy>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert Response Code" enabled="true">
@@ -268,6 +271,15 @@ Ejecutar con: jmeter -n -t jmeter_pruebas_parte1_streamlit_supabase_read.jmx -l 
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree/>
+        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager - n8n JSON" enabled="true">
+          <collectionProp name="HeaderManager.headers">
+            <elementProp name="" elementType="Header">
+              <stringProp name="Header.name">Content-Type</stringProp>
+              <stringProp name="Header.value">application/json</stringProp>
+            </elementProp>
+          </collectionProp>
+        </HeaderManager>
+        <hashTree/>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="3. n8n Webhook - Recomendaciones" enabled="true">
           <intProp name="HTTPSampler.response_timeout">30000</intProp>
           <stringProp name="HTTPSampler.domain">n8n.yamboly.lat</stringProp>
@@ -278,21 +290,15 @@ Ejecutar con: jmeter -n -t jmeter_pruebas_parte1_streamlit_supabase_read.jmx -l 
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
           <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
-          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
             <collectionProp name="Arguments.arguments">
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">{&quot;action_type&quot;:&quot;get_poi_recommendations&quot;,&quot;lat&quot;:41.4036,&quot;lng&quot;:2.1744,&quot;city_id&quot;:&quot;barcelona&quot;,&quot;user_id&quot;:&quot;stress-test-${__threadNum}&quot;}</stringProp>
+                <stringProp name="Argument.value">{&quot;action_type&quot;:&quot;get_poi_recommendations&quot;,&quot;lat&quot;:41.4036,&quot;lng&quot;:2.1744,&quot;city_id&quot;:&quot;barcelona&quot;,&quot;user_id&quot;:&quot;08e8c7e9-59e8-4d4e-8524-d1235fd5a14c&quot;}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
             </collectionProp>
           </elementProp>
-          <collectionProp name="HTTPSampler.headers">
-            <elementProp name="" elementType="Header">
-              <stringProp name="Header.name">Content-Type</stringProp>
-              <stringProp name="Header.value">application/json</stringProp>
-            </elementProp>
-          </collectionProp>
         </HTTPSamplerProxy>
         <hashTree/>
         <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Timer: Espera entre requests" enabled="true">

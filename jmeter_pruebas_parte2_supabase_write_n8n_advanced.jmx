@@ -184,7 +184,7 @@ Ejecutar con: jmeter -n -t jmeter_pruebas_parte2_supabase_write_n8n_advanced.jmx
             <collectionProp name="Arguments.arguments">
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">{&quot;action_type&quot;:&quot;get_audio_guide&quot;,&quot;poi_id&quot;:&quot;test-poi-${__threadNum}&quot;,&quot;poi_name&quot;:&quot;Lugar de Prueba ${__threadNum}&quot;,&quot;poi_description&quot;:&quot;Descripción de prueba para audio-guía&quot;,&quot;user_id&quot;:&quot;${USER_ID}&quot;,&quot;voice_id&quot;:&quot;echo&quot;}</stringProp>
+                <stringProp name="Argument.value">{&quot;action_type&quot;:&quot;get_audio_guide&quot;,&quot;poi_id&quot;:&quot;8c6dd8f1-9c49-4ed9-9b21-e93a99df03b3&quot;,&quot;poi_name&quot;:&quot;Lugar de Prueba ${__threadNum}&quot;,&quot;poi_description&quot;:&quot;Descripción de prueba para audio-guía&quot;,&quot;user_id&quot;:&quot;${USER_ID}&quot;,&quot;voice_id&quot;:&quot;echo&quot;}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
             </collectionProp>
@@ -230,7 +230,7 @@ Ejecutar con: jmeter -n -t jmeter_pruebas_parte2_supabase_write_n8n_advanced.jmx
             <collectionProp name="Arguments.arguments">
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">{&quot;action_type&quot;:&quot;create_booking&quot;,&quot;user_id&quot;:&quot;${USER_ID}&quot;,&quot;poi_id&quot;:&quot;test-poi-${__threadNum}&quot;,&quot;poi_name&quot;:&quot;Lugar de Prueba ${__threadNum}&quot;,&quot;booking_date&quot;:&quot;${__time(yyyy-MM-dd'T'HH:mm:ss)}&quot;,&quot;number_of_people&quot;:2,&quot;total_price&quot;:25.50,&quot;currency&quot;:&quot;EUR&quot;,&quot;contact_email&quot;:&quot;test-${__threadNum}@test.com&quot;,&quot;contact_phone&quot;:&quot;+34600000000&quot;}</stringProp>
+                <stringProp name="Argument.value">{&quot;action_type&quot;:&quot;create_booking&quot;,&quot;user_id&quot;:&quot;${USER_ID}&quot;,&quot;poi_id&quot;:&quot;8c6dd8f1-9c49-4ed9-9b21-e93a99df03b3&quot;,&quot;poi_name&quot;:&quot;Lugar de Prueba ${__threadNum}&quot;,&quot;booking_date&quot;:&quot;${__time(yyyy-MM-dd'T'HH:mm:ss)}&quot;,&quot;number_of_people&quot;:2,&quot;total_price&quot;:25.50,&quot;currency&quot;:&quot;EUR&quot;,&quot;contact_email&quot;:&quot;test-${__threadNum}@test.com&quot;,&quot;contact_phone&quot;:&quot;+34600000000&quot;}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
             </collectionProp>
